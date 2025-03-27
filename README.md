@@ -51,6 +51,13 @@ Article (1) states that In order to capture temporal dynamics of videos in class
  - Image-based hate detection methods cannot be directly adapted
  - Combined BERT-VIT-MFCC with the help of fusion layer
 
+### **An Investigation Into Explainable Audio Hate Speech Detection (4)**
+
+### **Prompting for Multimodal Hateful Meme Classification (5) **
+
+### **MultiHateClip: A Multilingual Benchmark Dataset for Hateful Video Detection on YouTube and Bilibili (6)**
+
+
 ## **Potential Architecture**
 ![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)
 

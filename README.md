@@ -12,7 +12,7 @@ Researches in the field of hate speech classification focuses on the end problem
 
 
 ## **Potential data sources**
-### <u>**Text (tweets)**</u>
+<u> ### **Text (tweets)**</u>
 
  - **HateXplain dataset**
      - Contains word-level annotations: a word w is assigned a rationale of 1 if it contributes to the classification of the sentence as hate speech, and 0 otherwise

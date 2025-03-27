@@ -11,13 +11,13 @@ Social media comprises platforms that allow users to connect with others to expa
 Researches in the field of hate speech classification focuses on the end problem of classifying a video as hateful as not hateful. As in article (3), the authors proposed a deep learning framework to classify videos as hateful or not hateful by combining state-of-the-art transformers with a fusion layer. Although it is a novel approach, it doesn’t generate any addiitonal insight on the reasoning behind the classification. Our deep learning framework attempts to explain the full methodology behind the classification by providing frame-level and chunk-level rationale for audio component of a video.
 
 
-## **Potential data sources**
+## ***Potential data sources***
 <u> ### **Text (tweets)**</u>
 
  - **HateXplain dataset**
      - Contains word-level annotations: a word w is assigned a rationale of 1 if it contributes to the classification of the sentence as hate speech, and 0 otherwise
 
-### <u>**Memes**</u>
+### ***Memes***
 Article (1) states that In order to capture temporal dynamics of videos in classification problems, it is crucial to consider the three main modalities which are text, image and audio. As memes inherently combine visual and textual elements, they closely mirror the multimodal structure of videos. Therefore memes become a go-to choice to augment video-based hate speech datasets as they remain signficantly smaller compared to datasets beloning to other modalities.
 
  - **Facebook Hateful Memes dataset(FHM)**
@@ -26,7 +26,7 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 
  - **Re-annoted meme dataset**
 
-### <u>***Videos***</u>
+### ***Videos***
 
  - **MultiHateClip (MHC)**
 

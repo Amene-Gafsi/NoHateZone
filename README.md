@@ -57,6 +57,8 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 
 ### **MultiHateClip: A Multilingual Benchmark Dataset for Hateful Video Detection on YouTube and Bilibili (6)**
 
+### **Multimodal hate speech detection via multi-scale visual kernels and knowledge distillation architecture (7)**
+
 
 ## **Potential Architecture**
 ![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)

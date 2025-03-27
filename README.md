@@ -68,7 +68,7 @@ Article (1) states that In order to capture temporal dynamics of videos in class
  - Find relevant **only-image** data (Noah)--
  - Seperate audio and frames (Amene) --
  - WhisperX information (Amene) --
- - 
+
 ### **Optional TO-DO**
  - Go deep in the past for literature review --
  - Extract videos using vide_download.py for MultiHateClip --

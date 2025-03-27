@@ -11,8 +11,9 @@ Social media comprises platforms that allow users to connect with others to expa
 Researches in the field of hate speech classification focuses on the end problem of classifying a video as hateful as not hateful. As in article (3), the authors proposed a deep learning framework to classify videos as hateful or not hateful by combining state-of-the-art transformers with a fusion layer. Although it is a novel approach, it doesn’t generate any addiitonal insight on the reasoning behind the classification. Our deep learning framework attempts to explain the full methodology behind the classification by providing frame-level and chunk-level rationale for audio component of a video.
 
 
-## ***Potential data sources***
-<u> ### **Text (tweets)**</u>
+## **Potential data sources**
+
+### ***Text (tweets)***
 
  - **HateXplain dataset**
      - Contains word-level annotations: a word w is assigned a rationale of 1 if it contributes to the classification of the sentence as hate speech, and 0 otherwise

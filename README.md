@@ -55,15 +55,23 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 
 
 ## **Questions**
-MultiHateClip is classifed by ‘Gender’ hate, is this a problem? —
-How to make use of HateXplain dataset? –
-Do we need a seperate model for multi-class classification (check HateMM)?--
+ - MultiHateClip is classifed by ‘Gender’ hate, is this a problem? --
+ - How to make use of HateXplain dataset? --
+ - Do we need a seperate model for multi-class classification (check HateMM)?--
 
 
 ## **TO-DO**
-Validate the Facebook dataset's license?
-Go deep in the past for literature review—
-Extract videos using vide_download.py for MultiHateClip--
+ - Validate the Facebook dataset's license (Mert) --
+ - Seperate text and images from frames (Mert) --
+ - HateXBert information (Mert)--
+ - Start with the annotation (Noah)--
+ - Find relevant **only-image** data (Noah)--
+ - Seperate audio and frames (Amene) --
+ - WhisperX information (Amene) --
+ - 
+### **Optional TO-DO**
+ - Go deep in the past for literature review --
+ - Extract videos using vide_download.py for MultiHateClip --
 
 
 

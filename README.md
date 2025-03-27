@@ -26,13 +26,13 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 
 **Re-annoted meme dataset**
 
-### **Videos**
+### ***Videos***
 
 **MultiHateClip (MHC)**
 
 **HateMM(HMM)**
 
-##**Research**
+## **Research**
 
 ### **Cross-Modal Transfer from Memes to Videos: Addressing Data Scarcity in Hateful Video Detection (1)**
 

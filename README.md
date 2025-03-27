@@ -53,7 +53,7 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 
 ### **An Investigation Into Explainable Audio Hate Speech Detection (4)**
 
-### **Prompting for Multimodal Hateful Meme Classification (5) **
+### **Prompting for Multimodal Hateful Meme Classification (5)**
 
 ### **MultiHateClip: A Multilingual Benchmark Dataset for Hateful Video Detection on YouTube and Bilibili (6)**
 

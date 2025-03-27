@@ -13,23 +13,24 @@ Researches in the field of hate speech classification focuses on the end problem
 
 ### **Potential data sources**
 #### **Text (tweets)**
+
 **HateXplain dataset**
-  •	Contains word-level annotations: a word w is assigned a rationale of 1 if it contributes to the classification of the sentence as hate speech, and 0 otherwise
+Contains word-level annotations: a word w is assigned a rationale of 1 if it contributes to the classification of the sentence as hate speech, and 0 otherwise
+
 #### **Memes** 
 Article (1) states that In order to capture temporal dynamics of videos in classification problems, it is crucial to consider the three main modalities which are text, image and audio. As memes inherently combine visual and textual elements, they closely mirror the multimodal structure of videos. Therefore memes become a go-to choice to augment video-based hate speech datasets as they remain signficantly smaller compared to datasets beloning to other modalities.
 
-	Facebook Hateful Memes dataset(FHM)
-•	Licence found
-	Multimedia automatic misogyny Identification(MAMI)
-	Re-annoted meme dataset
-Videos
-	MultiHateClip (MHC)
-	
-	HateMM(HMM)
+**Facebook Hateful Memes dataset(FHM)**
+**Multimedia automatic misogyny Identification(MAMI)**
+
+#### **Re-annoted meme dataset**
+
+#### **Videos**
+
+**MultiHateClip (MHC)**
+**HateMM(HMM)**
 
 
-
-Cross-Modal Transfer from Memes to Videos: Addressing Data Scarcity in Hateful Video Detection (1)
 The vision modality requires different handling, as videos consist of multiple frames, while memes are represented by single images.
 For video-based VLMs, such as LLaVA-NeXT-Video-7B, which can process multiple frames, we sample 16 frames per video, aligning with the model author’s recommendations and the average length of our video dataset
 To adapt meme data for video-based VLMs, we simulate a video format by applying random image augmentations (e.g., rotation, cropping, etc.) to generate 16 frames from a single meme image. We employ Low-Rank Adaptation (LoRA) adapters to fine-tune the pre-trained VLM during.
@@ -44,8 +45,13 @@ BitChute- labels along with the frame spans
 image-based hate detection methods cannot be directly adapted
 Combined BERT-VIT-MFCC with the help of fusion layer
 
-#### **Potential Architecture**
+### **Potential Architecture**
 ![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)
+
+#### **Memes Architecture**
+The vision modality requires different handling, as videos consist of multiple frames, while memes are represented by single images.
+For video-based VLMs, such as LLaVA-NeXT-Video-7B, which can process multiple frames, we sample 16 frames per video, aligning with the model author’s recommendations and the average length of our video dataset
+To adapt meme data for video-based VLMs, we simulate a video format by applying random image augmentations (e.g., rotation, cropping, etc.) to generate 16 frames from a single meme image. We employ Low-Rank Adaptation (LoRA) adapters to fine-tune the pre-trained VLM during.
 
 
 Questions

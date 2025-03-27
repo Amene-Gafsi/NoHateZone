@@ -36,19 +36,19 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 
 ### **Cross-Modal Transfer from Memes to Videos: Addressing Data Scarcity in Hateful Video Detection (1)**
 
-The vision modality requires different handling, as videos consist of multiple frames, while memes are represented by single images.
-For video-based VLMs, such as LLaVA-NeXT-Video-7B, which can process multiple frames, we sample 16 frames per video, aligning with the model author’s recommendations and the average length of our video dataset
-To adapt meme data for video-based VLMs, we simulate a video format by applying random image augmentations (e.g., rotation, cropping, etc.) to generate 16 frames from a single meme image. We employ Low-Rank Adaptation (LoRA) adapters to fine-tune the pre-trained VLM during.
+ - The vision modality requires different handling, as videos consist of multiple frames, while memes are represented by single images.
+ - For video-based VLMs, such as LLaVA-NeXT-Video-7B, which can process multiple frames, we sample 16 frames per video, aligning with the model author’s recommendations and the average length of our video dataset
+ - To adapt meme data for video-based VLMs, we simulate a video format by applying random image augmentations (e.g., rotation, cropping, etc.) to generate 16 frames from a single meme image. We employ Low-Rank Adaptation (LoRA) adapters to fine-tune the pre-trained VLM during.
 
 ### **Hate Speech recognition in Audio dataset (2)**
-In this study, we combine both approaches to classify entire audio clips as containing hate speech or normal speech, while also pinpointing the exact segments within the audio where hate speech occurs, using a 10-millisecond time grid.
-Cascading and End-to-End (E2E)
-•	pinpoint hate speech within specific time frames
+ - In this study, we combine both approaches to classify entire audio clips as containing hate speech or normal speech, while also pinpointing the exact segments within the audio where hate speech occurs, using a 10-millisecond time grid.
+ - Cascading and End-to-End (E2E)
+     - pinpoint hate speech within specific time frames
 
 ### **HateMM: A Multi-Modal Dataset for Hate Video Classification (3)**
-BitChute- labels along with the frame spans 
-image-based hate detection methods cannot be directly adapted
-Combined BERT-VIT-MFCC with the help of fusion layer
+ - BitChute- labels along with the frame spans 
+ - Image-based hate detection methods cannot be directly adapted
+ - Combined BERT-VIT-MFCC with the help of fusion layer
 
 ## **Potential Architecture**
 ![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)
@@ -61,7 +61,7 @@ Do we need a seperate model for multi-class classification (check HateMM)?--
 
 
 ## **TO-DO**
-Validate the 
+Validate the Facebook dataset's license?
 Go deep in the past for literature review—
 Extract videos using vide_download.py for MultiHateClip--
 

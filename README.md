@@ -13,9 +13,11 @@ Researches in the field of hate speech classification focuses on the end problem
 
 ### **Potential data sources**
 #### **Text (tweets)**
-	**HateXplain dataset**
+**HateXplain dataset**
   •	Contains word-level annotations: a word w is assigned a rationale of 1 if it contributes to the classification of the sentence as hate speech, and 0 otherwise
-Memes: In article (1) states that In order to capture temporal dynamics of videos in classification problems, it is crucial to consider the three main modalities which are text, image and audio. As memes inherently combine visual and textual elements, they closely mirror the multimodal structure of videos. Therefore memes become a go-to choice to augment video-based hate speech datasets as they remain signficantly smaller compared to datasets beloning to other modalities.
+#### **Memes** 
+Article (1) states that In order to capture temporal dynamics of videos in classification problems, it is crucial to consider the three main modalities which are text, image and audio. As memes inherently combine visual and textual elements, they closely mirror the multimodal structure of videos. Therefore memes become a go-to choice to augment video-based hate speech datasets as they remain signficantly smaller compared to datasets beloning to other modalities.
+
 	Facebook Hateful Memes dataset(FHM)
 •	Licence found
 	Multimedia automatic misogyny Identification(MAMI)

@@ -1,0 +1,7 @@
+soundfile
+librosa
+pandas
+numpy
+extract_audio
+opencv-python
+FFmpeg

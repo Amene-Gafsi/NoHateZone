@@ -1,5 +1,6 @@
 import cv2
 import os
+import pandas as pd
 import audio_extract
 
 
@@ -22,20 +23,25 @@ def extract_audio(input_path, output_dir):
 
 def extract_frames(input_path, output_dir, frequency=30):
     """
-    Extract frames from video file defined by input_path and save it to output_dir.
+    Extract frames from video file and save them to output_dir.
+    Records frame number and timestamp in a DataFrame.
+
     Args:
         input_path (str): Path to the input video file.
         output_dir (str): Path to the output directory where frames will be saved.
         frequency (int): Frequency of frames to save (e.g., save every nth frame).
+
     Returns:
-        Int: Number of frames extracted.
+        tuple: (number of frames extracted, DataFrame with 'frame_number' and 'timestamp' columns)
     """
     os.makedirs(output_dir, exist_ok=True)
 
     cap = cv2.VideoCapture(input_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
     count = 0
     frame_count = 0
     success = True
+    records = []
 
     while success:
         success, image = cap.read()
@@ -43,10 +49,15 @@ def extract_frames(input_path, output_dir, frequency=30):
             break
 
         if count % frequency == 0:
-            cv2.imwrite(os.path.join(output_dir, f"frame{count}.jpg"), image)
+            timestamp = count / fps
+            filename = os.path.join(output_dir, f"frame{count}.jpg")
+            cv2.imwrite(filename, image)
+            records.append((count, timestamp))
             frame_count += 1
 
         count += 1
 
     cap.release()
-    return frame_count
+
+    df = pd.DataFrame(records, columns=["frame_number", "timestamp_seconds"])
+    return frame_count, df

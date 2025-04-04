@@ -55,7 +55,7 @@ Article (1) states that In order to capture temporal dynamics of videos in class
 Memes typically consist of images containing some text [Shifman, 2013;
 Suryawanshi et al., 2020a,b].
 
-**Hateful meme definition**:multimodal units consisting of an image and
+**Hateful meme definition**: multimodal units consisting of an image and
 embedded text that have the potential to cause harm to an individual, an organization, a community, or society in general
 
 ### **An Investigation Into Explainable Audio Hate Speech Detection (4)**

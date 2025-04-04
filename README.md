@@ -80,14 +80,10 @@ embedded text that have the potential to cause harm to an individual, an organiz
 
 
 ## **TO-DO**
- - Validate the Facebook dataset's license (Mert) --
  - Seperate text and images from frames (Mert) --
  - HateXBert information (Mert)--
  - Add the multi-class (E.g. Racism, Sexism, etc.) to the framework (Mert)--
- - Start with the annotation (Noah)--
- - Find relevant **only-image** data (Noah)--
- - Seperate audio and frames (Amene) --
- - WhisperX information (Amene) --
+ - Annotation of HateMM (Noah)--
 
 ### **Optional TO-DO**
  - Go deep in the past for literature review --

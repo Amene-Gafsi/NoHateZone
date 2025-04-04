@@ -69,6 +69,7 @@ Article (1) states that In order to capture temporal dynamics of videos in class
  - How to make use of HateXplain dataset? --
  - Do we need a seperate model for multi-class classification (check HateMM)?--
  - How to split the data into training, validation and test?--
+ - Fine-tuning whisper?--
 
 
 ## **TO-DO**

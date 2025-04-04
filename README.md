@@ -84,6 +84,7 @@ embedded text that have the potential to cause harm to an individual, an organiz
  - HateXBert information (Mert)--
  - Add the multi-class (E.g. Racism, Sexism, etc.) to the framework (Mert)--
  - Annotation of HateMM (Noah)--
+ - Analyse and reanotate MMHS150k (Noah) --
 
 ### **Optional TO-DO**
  - Go deep in the past for literature review --

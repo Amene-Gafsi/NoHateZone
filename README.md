@@ -60,16 +60,17 @@ embedded text that have the potential to cause harm to an individual, an organiz
 
 ### **An Investigation Into Explainable Audio Hate Speech Detection (4)**
 
-### **Prompting for Multimodal Hateful Meme Classification (5)**
 
-### **MultiHateClip: A Multilingual Benchmark Dataset for Hateful Video Detection on YouTube and Bilibili (6)**
-
-### **Multimodal hate speech detection via multi-scale visual kernels and knowledge distillation architecture (7)**
+### **Multimodal hate speech detection via multi-scale visual kernels and knowledge distillation architecture (5)**
 
 ### **Flamingo: a Visual Language Model for Few-Shot Learning**
  - **Flamingo** models can proces arbitrarily interleaved visual data and text input
  - **Flamingo** models can also be effectively **fine-tuned**
  - Though the model only directly attends to a single image at a time, the dependency on all previous images remains via self-attention in the LM. This single-image cross-attention scheme importantly allows the model to seamlessly generalise to any number of visual inputs, regardless of how many are used during training. In particular, we use only up to 5 images per sequence when training on our interleaved datasets, yet our model is able to benefit from sequences of up to 32 pairs (or “shots”) of images/videos and corresponding texts during evaluation.
+ - **Flamingo can also process Videos**: **The Perceiver Resampler** module maps a variable size grid of **spatio-temporal visual features output** by the Vision Encoder to a fixed number of output tokens, independently from the input image resolution or the number of input video frames. This transformer has a set of **learned latent vectors** as **queries** and the **keys** and **values** are a concatenation of the spatio-temporal visual features with the learned latent vectors.
+
+When adding tokens to the data:
+Given text interleaved with images/videos. We first process the text by inserting
 
 ## **Potential Architecture**
 ![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)

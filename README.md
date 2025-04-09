@@ -83,6 +83,7 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
  - Do we need a seperate model for multi-class classification (check HateMM)?--
  - How to split the data into training, validation and test?--
  - Fine-tuning whisper?--
+ - What is the ideal number of trainable parameters for Flamingo?--
 
 
 ## **TO-DO**

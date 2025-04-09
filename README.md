@@ -69,8 +69,11 @@ embedded text that have the potential to cause harm to an individual, an organiz
  - Though the model only directly attends to a single image at a time, the dependency on all previous images remains via self-attention in the LM. This single-image cross-attention scheme importantly allows the model to seamlessly generalise to any number of visual inputs, regardless of how many are used during training. In particular, we use only up to 5 images per sequence when training on our interleaved datasets, yet our model is able to benefit from sequences of up to 32 pairs (or “shots”) of images/videos and corresponding texts during evaluation.
  - **Flamingo can also process Videos**: **The Perceiver Resampler** module maps a variable size grid of **spatio-temporal visual features output** by the Vision Encoder to a fixed number of output tokens, independently from the input image resolution or the number of input video frames. This transformer has a set of **learned latent vectors** as **queries** and the **keys** and **values** are a concatenation of the spatio-temporal visual features with the learned latent vectors.
 
-When adding tokens to the data:
-Given text interleaved with images/videos. We first process the text by inserting
+**When adding tokens to the data**:
+Given text interleaved with images/videos. We first process the text by inserting `<image>` tags at the locations of the visual data in the text as well as **special tokens** such as : `<BOS>` for "beginning of sequence" or <EOC> for "end of chunk".
+Images are processed independently by the **Vision Encoder** and **Perceiver Resampler** to extract visual tokens
+**Processing procedure**: At a given text token, the model only cross-attends to the visual tokens corresponding to the last preceding image/video
+
 
 ## **Potential Architecture**
 ![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)

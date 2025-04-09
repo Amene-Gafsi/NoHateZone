@@ -80,8 +80,6 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
 
 
 ## **Questions**
- - MultiHateClip is classifed by ‘Gender’ hate, is this a problem? --
- - How to make use of HateXplain dataset? --
  - Do we need a seperate model for multi-class classification (check HateMM)?--
  - How to split the data into training, validation and test?--
  - Fine-tuning whisper?--

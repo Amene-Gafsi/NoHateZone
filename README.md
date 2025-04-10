@@ -76,7 +76,10 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
 
 
 ## **Potential Architecture**
-![image](https://github.com/user-attachments/assets/6e7f02e1-9834-42b9-82de-e492e26076ea)
+![image](https://github.com/user-attachments/assets/8122bdd2-67be-46f4-9c94-c97d4d88b53b)
+![image](https://github.com/user-attachments/assets/273d49fe-05c7-4789-b114-f1698e42ec8a)
+![image](https://github.com/user-attachments/assets/c293558a-6ead-4e20-a3a4-e6db71ec4f01)
+
 
 
 ## **Questions**

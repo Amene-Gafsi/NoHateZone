@@ -102,12 +102,10 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
 
 
 ## **TO-DO**
- - Seperate text and images from frames (Mert) --
- - HateXBert information (Mert)--
- - Add the multi-class (E.g. Racism, Sexism, etc.) to the framework (Mert)--
+ - Add the inference part for TrOCR fine-tuning (Mert) --
+ - BERT fine-tuning with hatespeech tweets (Amene) --
  - Annotation of HateMM (Noah)--
- - Analyse and reanotate MMHS150k (Noah) --
- - Take a look at HateXplain (Noah) -- 
+ - ViT architecture analysis (Noah)
 
 ### **Optional TO-DO**
  - Go deep in the past for literature review --

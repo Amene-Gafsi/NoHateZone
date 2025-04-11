@@ -2,6 +2,8 @@ import cv2
 import os
 import pandas as pd
 import audio_extract
+import pytesseract
+
 
 
 def extract_audio(input_path, output_dir):

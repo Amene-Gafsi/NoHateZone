@@ -5,3 +5,5 @@ numpy
 extract_audio
 opencv-python
 FFmpeg
+open-flamingo
+easyocr

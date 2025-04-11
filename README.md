@@ -62,7 +62,9 @@ embedded text that have the potential to cause harm to an individual, an organiz
  - TrOCR consists of an image Transformer encoder and an autoregressive text Transformer
  - The model can be **fine-tuned** with human-label datasets
  - **Optical Character Recognition (OCR)** is the electronic or mechanical conversion of images of types, handwritten or printed text into machine-encoded text, whether from a scanned document, a photo of a document, a scene photo or from subtitle text superimposed on an image
- - 
+
+![image](https://github.com/user-attachments/assets/88dd0fe7-6849-487e-b53a-7dea758421e7)
+
 
 ### **An Investigation Into Explainable Audio Hate Speech Detection (4)**
 

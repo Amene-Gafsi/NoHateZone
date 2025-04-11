@@ -58,6 +58,12 @@ Suryawanshi et al., 2020a,b].
 **Hateful meme definition**: multimodal units consisting of an image and
 embedded text that have the potential to cause harm to an individual, an organization, a community, or society in general
 
+### **TrOCR: Transformer-based Optical Character Recognition with Pre-trained Models**
+ - TrOCR consists of an image Transformer encoder and an autoregressive text Transformer
+ - The model can be **fine-tuned** with human-label datasets
+ - **Optical Character Recognition (OCR)** is the electronic or mechanical conversion of images of types, handwritten or printed text into machine-encoded text, whether from a scanned document, a photo of a document, a scene photo or from subtitle text superimposed on an image
+ - 
+
 ### **An Investigation Into Explainable Audio Hate Speech Detection (4)**
 
 

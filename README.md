@@ -68,7 +68,7 @@ embedded text that have the potential to cause harm to an individual, an organiz
  - TrOCR does not require any convolutional network for the backbone and does not introduce any image-specific inductive biases which make the model very easy to implement and maintain.
 
 **Architecture**
-**Encoder**: The encoder receives an input image with dimensions /[3xH_0xW_0]
+
 
 ### **An Investigation Into Explainable Audio Hate Speech Detection (4)**
 

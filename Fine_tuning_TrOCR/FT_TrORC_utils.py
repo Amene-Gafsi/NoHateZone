@@ -1,12 +1,10 @@
+
 import os
 from PIL import Image
 import torch
 from torch.utils.data import Dataset
-from transformers import TrOCRProcessor,VisionEncoderDecoderModel,Seq2SeqTrainer, Seq2SeqTrainingArguments, default_data_collator
 from torchvision import transforms
-from datasets import load_metric
 from torch.cuda import is_available as cuda_available
-from torchvision.transforms import ToTensor
 
 
 
@@ -52,6 +50,22 @@ class MMF_HAR(Dataset):
         }
 
 
+# Modify Dataset Class
+class AugmentedMMFHAR(MMF_HAR):
+    
+    def __init__(self, root_dir, df, processor, transform=None, **kwargs):
+        super().__init__(root_dir, df, processor, **kwargs)
+        self.transform = transform
+        
+    def __getitem__(self, idx):
+        item = super().__getitem__(idx)
+        
+        # Apply augmentations only to training images
+        if self.transform:
+            image = transforms.ToPILImage()(item["pixel_values"])
+            item["pixel_values"] = transforms.ToTensor()(self.transform(image))
+            
+        return item
 
 
 

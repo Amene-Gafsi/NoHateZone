@@ -1,0 +1,6 @@
+datasets==2.19.1
+pandas==2.0.3
+Pillow==11.2.1
+torch==2.6.0+cu118
+torchvision==0.15.2
+transformers==4.38.2

@@ -103,3 +103,32 @@ class AudioTranscriber:
             start = chunk["timestamp"][0]
             end = chunk["timestamp"][1]
             print(f"sentence: {sentence}, Start: {start}s, End: {end}s")
+
+    def get_text_in_interval(self, result, start_time, end_time):
+        """
+        Filters and returns transcribed text within a specific time interval.
+
+        Arguments:
+        result (dict): A single transcription result with 'chunks'.
+        start_time (float): Start time in seconds.
+        end_time (float): End time in seconds.
+
+        Returns:
+        str: Combined transcription text from the specified interval.
+        """
+        selected_chunks = [
+            chunk["text"]
+            for chunk in result.get("chunks", [])
+            if chunk["timestamp"][0] >= start_time and chunk["timestamp"][1] <= end_time
+        ]
+        return " ".join(selected_chunks)
+    
+    def extract_segments_with_timestamps(self, result):
+        segments = []
+        for chunk in result.get("chunks", []):
+            segments.append({
+                "text": chunk.get("text", ""),
+                "start": chunk.get("timestamp", (None,))[0],
+                "end": chunk.get("timestamp", (None, None))[1]
+            })
+        return segments

@@ -95,10 +95,11 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
 
 
 ## **Questions**
- - Do we need a seperate model for multi-class classification (check HateMM)?--
+ - Multi-class classification ?--
  - How to split the data into training, validation and test?--
- - Fine-tuning whisper?--
- - What should we do with the text in the frames, should we only remove subtitles which distort the images?
+## **Important Questions**
+ - What should we do with the text in the frames, should we only remove subtitles which distort the images? (because ViT processes them better?)
+ - Should we use Fine-Tuned Bert instead of DistillBert?
 
 
 ## **TO-DO**

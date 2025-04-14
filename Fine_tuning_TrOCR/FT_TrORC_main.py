@@ -16,7 +16,20 @@ from torchvision import transforms
 from transformers import TrOCRProcessor,VisionEncoderDecoderModel
 import argparse
 from pathlib import Path
+import sys
 
+
+
+print(">>> sys.executable:", sys.executable)
+print(">>> sys.path:", sys.path)
+print(">>> PATH environment variable:", os.environ.get("PATH"))
+print(">>> Which python is in PATH? ", os.popen('which python3').read())
+try:
+    import transformers
+    print(">>> Transformers version:", transformers.__version__)
+except Exception as e:
+    print(">>> Error importing transformers:", e)
+    raise
 
 #---------------------------------------------DATASET CLASSES--------------------------------------------------#
 class MMF_HAR(Dataset):

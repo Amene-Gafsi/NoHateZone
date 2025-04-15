@@ -100,6 +100,7 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
 ## **Important Questions**
  - What should we do with the text in the frames, should we only remove subtitles which distort the images? (because ViT processes them better?)
  - Should we use Fine-Tuned Bert instead of DistillBert?
+ - SHould we use sentence transformer?
 
 
 ## **TO-DO**

@@ -1,7 +1,6 @@
 external_data
 data
-input/frames
-input/audio
+media
 audio_transc
 __pycache__/
 Mert

@@ -1,20 +1,19 @@
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import os
-
-from torch.utils.data import Dataset as TorchDataset
-from torch.utils.data import DataLoader
-from sklearn.model_selection import train_test_split
-from torch.utils.data import Sampler
 import random
-from torch.optim import AdamW
 
-import torch
 import pandas as pd
-from tqdm.auto import tqdm
-
-from transformers import get_scheduler
-
+import torch
 from sklearn.metrics import accuracy_score, f1_score
+from sklearn.model_selection import train_test_split
+from torch.optim import AdamW
+from torch.utils.data import DataLoader, Sampler
+from torch.utils.data import Dataset as TorchDataset
+from tqdm.auto import tqdm
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    get_scheduler,
+)
 
 
 class HateSpeechDataset(TorchDataset):

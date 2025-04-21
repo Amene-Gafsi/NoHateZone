@@ -1,8 +1,12 @@
 media
 __pycache__/
+<<<<<<< HEAD
 external_data
 input
 data
 Fine_tuning_TrOCR
 data_proc/input
 data_proc/processed
+=======
+data
+>>>>>>> cea4d4138deb7da72bb4f29dc0fb80522f6e6c2f

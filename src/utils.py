@@ -1,9 +1,10 @@
-import cv2
+import json
 import os
-import pandas as pd
-import audio_extract
-import pytesseract
 
+import audio_extract
+import cv2
+import pandas as pd
+import pytesseract
 
 
 def extract_audio(input_path, output_dir):
@@ -21,7 +22,6 @@ def extract_audio(input_path, output_dir):
         os.remove(output_path)
 
     return audio_extract.extract_audio(input_path, output_path)
-
 
 
 def extract_frames(input_path, output_dir, video_index, frequency=30):
@@ -67,7 +67,6 @@ def extract_frames(input_path, output_dir, video_index, frequency=30):
     return frame_count, df
 
 
-
 def create_chunk_dataframe(chunk_info):
     """
     Create a DataFrame from a list of dictionaries containing chunk information,
@@ -98,6 +97,7 @@ def create_chunk_dataframe(chunk_info):
 
     return df
 
+
 def combine_text(chunk_text, frame_text):
     """
     Combine the existing chunk text and frame text with ' | ' in between,
@@ -105,14 +105,21 @@ def combine_text(chunk_text, frame_text):
     """
     chunk_str = str(chunk_text).strip()
     frame_str = str(frame_text).strip()
-    
+
     # If the chunk text is empty, return it unchanged (do nothing).
     if chunk_str == "":
         return chunk_str
-    
+
     # If the chunk text is not empty but the frame text is empty, also do nothing.
     if frame_str == "":
         return chunk_str
-    
+
     # Both are non-empty; combine them with ' | '.
     return chunk_str + " | " + frame_str
+
+
+def load_data(json_path):
+    """Load the JSON data."""
+    with open(json_path, "r") as f:
+        data = json.load(f)
+    return data

@@ -1,7 +1,8 @@
 
 import pandas as pd
 import torch
-from transformers import TrOCRProcessor,Seq2SeqTrainer, Seq2SeqTrainingArguments
+from torch.utils.data import Dataset
+from transformers import TrOCRProcessor,Seq2SeqTrainer, Seq2SeqTrainingArguments,VisionEncoderDecoderModel
 from torchvision import transforms
 from datasets import load_metric
 from torch.cuda import is_available as cuda_available
@@ -10,10 +11,6 @@ from torchvision.transforms import ToTensor
 #from TrORC_initiator import configure_model, load_model_with_check
 import os
 from PIL import Image
-import torch
-from torch.utils.data import Dataset
-from torchvision import transforms
-from transformers import TrOCRProcessor,VisionEncoderDecoderModel
 import argparse
 from pathlib import Path
 import sys
@@ -184,7 +181,8 @@ test_csv_path  = os.path.join(DATASET_PATH, "data", "testing",  "mmf_har_test_co
 # Load dataframes
 train_df = pd.read_csv(train_csv_path)
 test_df = pd.read_csv(test_csv_path)
-
+train_df = train_df.dropna(subset=['text'])
+test_df = test_df.dropna(subset=['text'])
 
 # Define the image directories
 image_train_dir = os.path.join(DATASET_PATH, "data", "images", "training")
@@ -237,7 +235,7 @@ training_args = Seq2SeqTrainingArguments(
     
     # Training parameters
     learning_rate=3e-5,
-    num_train_epochs=15,
+    num_train_epochs=5,
 
     # Phase 1: (Learning rate warmup) increases linearly from 0 to 3e-5
     # Phase 2: (Learning rate decay) decreases linearly from 3e-5 to 0

@@ -46,7 +46,7 @@ def save_dataframe(df, output_path):
 
 
 def main():
-    root_dir = "../data"
+    root_dir = os.path.abspath("./NoHateZone/data/MMHS150K")  # <-- changed this line
     json_path = os.path.join(root_dir, "MMHS150K_GT.json")
     img_txt_dir = os.path.join(root_dir, "img_txt")
     output_csv_path = os.path.join(root_dir, "tweet_ocr_dataset.csv")

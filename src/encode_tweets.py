@@ -22,7 +22,13 @@ def combine_text(tweet_text, ocr_text):
 
 def embed_text(text, tokenizer, model, device="cpu"):
     """Generate embeddings for the given text."""
-    encoded_input = tokenizer(text, return_tensors="pt", add_special_tokens=True)
+    encoded_input = tokenizer(
+        text,
+        return_tensors="pt",
+        add_special_tokens=True,
+        truncation=True,
+        max_length=512,
+    )
     encoded_input = {k: v.to(device) for k, v in encoded_input.items()}
 
     with torch.no_grad():
@@ -56,7 +62,7 @@ def process_dataframe(df, tokenizer, model, device="cpu"):
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    root_dir = "../data"
+    root_dir = os.path.abspath("./NoHateZone/data/MMHS150K")  # <-- changed this line
     csv_path = os.path.join(root_dir, "tweet_ocr_dataset.csv")
     output_path = os.path.join(root_dir, "tweet_ocr_embeddings.npy")
 

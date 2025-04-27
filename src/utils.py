@@ -183,7 +183,9 @@ def transcribe_audio(input_audio, device):
 def classify_sentences(text, model_path):
     """Split the transcribtion into sentences and classify them using finetuned DistilBERT. Returns a DataFrame sentences and labels et probability of each class."""
     sentences = [
-        sentence.strip() for sentence in re.split(r"[.!?]", text) if sentence.strip()
+        sentence.strip()
+        for sentence in re.findall(r"[^.!?]*[.!?]", text)
+        if sentence.strip()
     ]
 
     labels = []
@@ -212,6 +214,18 @@ def classify_sentences(text, model_path):
         )
 
     return pd.DataFrame(labels)
+
+
+def convert_to_min_sec(beep_intervals):
+    """Convert list of (start, end) intervals in seconds to (min:sec) format."""
+    converted = []
+    for start, end in beep_intervals:
+        start_min = int(start // 60)
+        start_sec = int(start % 60)
+        end_min = int(end // 60)
+        end_sec = int(end % 60)
+        converted.append((f"{start_min}:{start_sec:02d}", f"{end_min}:{end_sec:02d}"))
+    return converted
 
 
 def find_beep_intervals(df, transcription):
@@ -244,11 +258,31 @@ def find_beep_intervals(df, transcription):
                 start_time = transcript_words[i]["start"]
                 end_time = transcript_words[i + len(sentence_words) - 1]["end"]
                 beep_intervals.append((start_time, end_time))
-                print(
-                    f"[MATCH] '{sentence}' → BEEP from {start_time:.2f}s to {end_time:.2f}s"
-                )
-
+                # print(
+                #     f"[MATCH] '{sentence}' → BEEP from {start_time:.2f}s to {end_time:.2f}s"
+                # )
+    beep_intervals = clean_beep_intervals(beep_intervals)
+    print("Beeping :", convert_to_min_sec(beep_intervals))
     return beep_intervals
+
+
+def clean_beep_intervals(beep_intervals):
+    """Remove duplicates, sort, and merge overlapping intervals."""
+
+    # Remove duplicates and sort
+    intervals = sorted(set(beep_intervals))
+
+    merged = []
+    for start, end in intervals:
+        if not merged:
+            merged.append((start, end))
+        else:
+            last_start, last_end = merged[-1]
+            if start <= last_end:  # Overlapping or touching intervals
+                merged[-1] = (last_start, max(last_end, end))  # Merge them
+            else:
+                merged.append((start, end))
+    return merged
 
 
 def censor_audio(input_audio_path, beep_intervals, output_audio_path):
@@ -263,6 +297,7 @@ def censor_audio(input_audio_path, beep_intervals, output_audio_path):
         duration = end_ms - start_ms
         censored_audio += audio[current_pos:start_ms]
         beep = Sine(1000).to_audio_segment(duration=duration).apply_gain(-3.0)
+        beep = beep.set_frame_rate(audio.frame_rate)
         censored_audio += beep
         current_pos = end_ms
 

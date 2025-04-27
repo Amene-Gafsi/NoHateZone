@@ -182,7 +182,10 @@ def transcribe_audio(input_audio, device):
 
 def classify_sentences(text, model_path):
     """Split the transcribtion into sentences and classify them using finetuned DistilBERT. Returns a DataFrame sentences and labels et probability of each class."""
-    sentences = [sentence.strip() for sentence in text.split(".") if sentence.strip()]
+    sentences = [
+        sentence.strip() for sentence in re.split(r"[.!?]", text) if sentence.strip()
+    ]
+
     labels = []
     distilbert_model = DistilBertForSequenceClassification.from_pretrained(model_path)
     distilbert_tokenizer = DistilBertTokenizer.from_pretrained(model_path)
@@ -244,7 +247,6 @@ def find_beep_intervals(df, transcription):
                 print(
                     f"[MATCH] '{sentence}' → BEEP from {start_time:.2f}s to {end_time:.2f}s"
                 )
-                break
 
     return beep_intervals
 
@@ -380,22 +382,22 @@ def process_frames(frames_path, hate_classifier_path, device):
         model_ocr,
         hate_classifier,
     ) = load_all_models(device, hate_classifier_path)
-    print("Total frames:", len(frames))
+    total_frames = len(frames)
     i = 0
     for frame in frames:
         i += 1
-        print("Processing frame number :", i, "=>", frame)
+        print("\nProcessing frame :", i, "/", total_frames, "=>", frame)
         image_path = os.path.join(frames_path, frame)
 
         image_embedding = get_image_embedding(
             image_path, feature_extractor, model_img, device
         )
-        print("Image embedding shape:", image_embedding.shape)
+        print("Frame image encoded.")
 
         text_embedding = get_text_embedding(
             image_path, tokenizer_ocr, model_ocr, tokenizer_tweet, model_tweet, device
         )
-        print("Text embedding shape:", text_embedding.shape)
+        print("OCR text encoded.")
 
         predicted_class = predict_hate(hate_classifier, text_embedding, image_embedding)
         print("Predicted class:", predicted_class)
@@ -403,7 +405,7 @@ def process_frames(frames_path, hate_classifier_path, device):
         if predicted_class == 1:
             to_blur.append(frame)
 
-    print("Frames to blur:", to_blur)
+    print("\nFrames to blur:", to_blur)
     return to_blur
 
 
@@ -426,7 +428,7 @@ def blur_video_frames(video_path, to_blur, output_video_path):
     out = cv2.VideoWriter(
         output_video_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height)
     )
-    to_blur_numbers = extract_frame_numbers(to_blur)
+    to_blur_numbers = extend_blur_numbers(extract_frame_numbers(to_blur))
 
     success = True
     frame_idx = 0
@@ -446,6 +448,22 @@ def blur_video_frames(video_path, to_blur, output_video_path):
     cap.release()
     out.release()
     print(f"censored frames video saved at {output_video_path}")
+
+
+def extend_blur_numbers(to_blur_numbers, frequency=30):
+    """Keep all original numbers and add extra ones if i-frequency and i+frequency exist."""
+    to_blur_set = set(to_blur_numbers)
+    extra_numbers = []
+
+    for i in range(max(to_blur_numbers) + 1):
+        if (
+            (i - 30 in to_blur_set)
+            and (i + 30 in to_blur_set)
+            and (i not in to_blur_set)
+        ):
+            extra_numbers.append(i)
+
+    return sorted(to_blur_numbers + extra_numbers)
 
 
 def update_audio(input_video, censored_audio, output_video):
@@ -478,3 +496,15 @@ def update_audio(input_video, censored_audio, output_video):
     shutil.move(temp_output, output_video)
 
     print("Censored video saved as:", output_video)
+
+
+def clean_up(audio_path, frames_path, output_audio):
+    """Delete audio, frames, and output audio directories."""
+    if os.path.exists(audio_path):
+        shutil.rmtree(audio_path)
+    if os.path.exists(frames_path):
+        shutil.rmtree(frames_path)
+    if os.path.exists(output_audio):
+        shutil.rmtree(output_audio)
+
+    print("Cleaned up temporary files.")

@@ -22,7 +22,8 @@ def main(media_dir, checkpoints_dir):
     video_path = os.path.join(media_dir, "input", "video", "video.mp4")
     audio_path = os.path.join(media_dir, "input", "audio")
     frames_path = os.path.join(media_dir, "input", "frames")
-    output_audio_path = os.path.join(media_dir, "output", "audio", "censored_audio.wav")
+    output_audio = os.path.join(media_dir, "output", "audio")
+    output_audio_path = os.path.join(output_audio, "censored_audio.wav")
     output_video_path = os.path.join(media_dir, "output", "video", "censored_video.mp4")
 
     print("\nExtracting audio and frames...")
@@ -57,6 +58,9 @@ def main(media_dir, checkpoints_dir):
 
     print("\nUpdating video with censored audio...")
     update_audio(output_video_path, output_audio_path, output_video_path)
+
+    print("\nCleaning up...")
+    clean_up(audio_path, frames_path, output_audio)
 
 
 if __name__ == "__main__":

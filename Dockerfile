@@ -38,6 +38,7 @@ RUN chown -R ${LDAP_USERNAME}:${LDAP_GROUPNAME} /home/${LDAP_USERNAME}
 # Install required packages
 RUN apt update
 RUN apt install python3-pip -y
+RUN apt install ffmpeg -y
 
 # Set the working directory in your user's home
 WORKDIR /home/${LDAP_USERNAME}

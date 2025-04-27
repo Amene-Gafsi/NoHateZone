@@ -7,10 +7,11 @@ from tqdm import tqdm
 from transformers import DistilBertModel, DistilBertTokenizer
 
 
-def load_model(model_name="distilbert-base-uncased"):
+def load_model(model_name="distilbert-base-uncased", device="cpu"):
     """Load the DistilBERT model and tokenizer."""
     tokenizer = DistilBertTokenizer.from_pretrained(model_name)
     model = DistilBertModel.from_pretrained(model_name)
+    model.to(device)
     model.eval()
     return tokenizer, model
 

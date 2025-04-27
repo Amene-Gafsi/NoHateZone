@@ -1,3 +1,4 @@
+import json
 import os
 
 import numpy as np
@@ -6,7 +7,12 @@ from PIL import Image
 from tqdm import tqdm
 from transformers import ViTImageProcessor, ViTModel
 
-from utils import load_data
+
+def load_data(json_path):
+    """Load the JSON data."""
+    with open(json_path, "r") as f:
+        data = json.load(f)
+    return data
 
 
 def load_model(model_name, device):

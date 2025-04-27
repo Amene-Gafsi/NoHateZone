@@ -1,10 +1,11 @@
+import warnings
+
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
-import warnings
 
 
 class AudioTranscriber:
-    def __init__(self, chunk_length=30):
+    def __init__(self, device, chunk_length=30):
         """
         Initializes the AudioTranscriber with a pre-trained Whisper model.
         The model is loaded onto the GPU if available, otherwise it falls back to CPU.
@@ -16,8 +17,7 @@ class AudioTranscriber:
         # inpsired by https://huggingface.co/openai/whisper-large-v3-turbo
 
         warnings.filterwarnings("ignore")
-
-        device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        self.device = device
         torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
         model_id = "openai/whisper-large-v3-turbo"
 
@@ -82,6 +82,7 @@ class AudioTranscriber:
             If multiple files:
                 List of such dictionaries, one per file.
         """
+
         return self.pipe(
             input_audio,
             return_timestamps=return_timestamps,
@@ -122,13 +123,15 @@ class AudioTranscriber:
             if chunk["timestamp"][0] >= start_time and chunk["timestamp"][1] <= end_time
         ]
         return " ".join(selected_chunks)
-    
+
     def extract_segments_with_timestamps(self, result):
         segments = []
         for chunk in result.get("chunks", []):
-            segments.append({
-                "text": chunk.get("text", ""),
-                "start": chunk.get("timestamp", (None,))[0],
-                "end": chunk.get("timestamp", (None, None))[1]
-            })
+            segments.append(
+                {
+                    "text": chunk.get("text", ""),
+                    "start": chunk.get("timestamp", (None,))[0],
+                    "end": chunk.get("timestamp", (None, None))[1],
+                }
+            )
         return segments

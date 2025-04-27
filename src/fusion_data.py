@@ -66,7 +66,8 @@ def main():
 
     print(f"Shape of the DataFrame: {df.shape}")
 
-    df.to_csv(os.path.join(root_dir, "fusion_data.csv"), index=False)
+    # df.to_csv(os.path.join(root_dir, "fusion_data.csv"), index=False)
+    df.to_pickle(os.path.join(root_dir, "fusion_data.pkl"))
 
 
 if __name__ == "__main__":

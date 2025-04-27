@@ -92,6 +92,8 @@ Images are processed independently by the **Vision Encoder** and **Perceiver Res
 ![image](https://github.com/user-attachments/assets/273d49fe-05c7-4789-b114-f1698e42ec8a)
 ![image](https://github.com/user-attachments/assets/c293558a-6ead-4e20-a3a4-e6db71ec4f01)
 
+For analysis, create this plot:
+![image](https://github.com/user-attachments/assets/b87660ac-c33d-4946-aa20-12a5f9e9f096)
 
 
 ## **Questions**

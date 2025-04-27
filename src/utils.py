@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import shutil
 import subprocess
 
 import audio_extract
@@ -449,7 +450,10 @@ def blur_video_frames(video_path, to_blur, output_video_path):
 
 def update_audio(input_video, censored_audio, output_video):
     """Update the audio of the video with the censored audio."""
+    temp_output = output_video + ".temp.mp4"
+
     os.makedirs(os.path.dirname(output_video), exist_ok=True)
+
     cmd = [
         "ffmpeg",
         "-i",
@@ -464,10 +468,13 @@ def update_audio(input_video, censored_audio, output_video):
         "0:v:0",
         "-map",
         "1:a:0",
-        output_video,
+        temp_output,
         "-y",
     ]
 
     subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    # Replace the original file
+    shutil.move(temp_output, output_video)
 
     print("Censored video saved as:", output_video)

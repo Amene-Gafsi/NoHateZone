@@ -41,7 +41,15 @@ def extract_audio(input_path, output_dir):
     if os.path.exists(output_path):
         os.remove(output_path)
 
-    return audio_extract.extract_audio(input_path, output_path)
+    try:
+        audio = audio_extract.extract_audio(input_path, output_path)
+        return audio
+    except Exception as e:
+        print(f"[WARNING] No audio found or extraction failed: {e}")
+        silent_audio = AudioSegment.silent(duration=1000)  # 1 second of silence
+        silent_audio.export(output_path, format="mp3")
+        print(f"Saved silent audio at {output_path}")
+        return output_path
 
 
 def extract_frames(input_path, output_dir, video_index=None, frequency=30):

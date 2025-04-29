@@ -351,6 +351,7 @@ def load_all_models(device, hate_classifier_path="../checkpoints/model_epoch_1.p
     hate_classifier = HateClassifier(embed_dim=768).to(device)
     checkpoint = torch.load(hate_classifier_path, map_location=device)
     hate_classifier.load_state_dict(checkpoint["model_state_dict"])
+    # hate_classifier.load_state_dict(checkpoint)
     hate_classifier.to(device).eval()
 
     return (
@@ -495,6 +496,9 @@ def blur_video_frames(video_path, to_blur, output_video_path):
 
 def extend_blur_numbers(to_blur_numbers, frequency=30):
     """Keep all original numbers and add extra ones if i-frequency and i+frequency exist."""
+    if not to_blur_numbers:
+        return []
+
     to_blur_set = set(to_blur_numbers)
     extra_numbers = []
 

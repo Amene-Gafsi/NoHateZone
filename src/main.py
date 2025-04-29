@@ -17,7 +17,7 @@ def main(media_dir, checkpoints_dir):
     print("Using device:", device)
 
     finetuned_distilbert_path = os.path.join(checkpoints_dir, "distilbert_hatespeech")
-    fusion_model_path = os.path.join(checkpoints_dir, "model_epoch_1.pt")
+    fusion_model_path = os.path.join(checkpoints_dir, "model_epoch_12.pt")
 
     video_path = os.path.join(media_dir, "input", "video", "video.mp4")
     audio_path = os.path.join(media_dir, "input", "audio")
@@ -36,7 +36,7 @@ def main(media_dir, checkpoints_dir):
 
     print("\nClassifying sentences...")
     df = classify_sentences(transcription["text"], finetuned_distilbert_path)
-    print(df.head())
+    print(df)
 
     print("\nFinding beep time intervals...")
     beep_intervals = find_beep_intervals(df, transcription)
@@ -46,8 +46,6 @@ def main(media_dir, checkpoints_dir):
 
     print("\nProcessing frames...")
     to_blur = process_frames(frames_path, fusion_model_path, device)
-
-    print("Frames to blur:", to_blur)
 
     print("\nGenerating censored video...")
     blur_video_frames(

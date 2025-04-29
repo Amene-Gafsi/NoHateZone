@@ -4,6 +4,7 @@ import warnings
 
 import torch
 from transformers.utils import logging
+import pandas as pd
 
 from utils import *
 
@@ -13,6 +14,10 @@ logging.set_verbosity_error()
 
 
 def main(media_dir, checkpoints_dir):
+    pd.set_option("display.max_columns", None)
+    pd.set_option("display.max_rows", None)
+    pd.set_option("display.max_colwidth", None)
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 

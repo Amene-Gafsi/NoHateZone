@@ -108,14 +108,11 @@ For analysis, create this plot:
 
 
 ## **TO-DO**
- - Add the inference part for TrOCR fine-tuning (Mert) --
- - BERT fine-tuning with hatespeech tweets (Amene) --
- - Annotation of HateMM (Noah)--
- - ViT architecture analysis (Noah)
+
 
 ### **Optional TO-DO**
  - Go deep in the past for literature review --
- - Extract videos using vide_download.py for MultiHateClip --
+ - Adding contrast before OCR detection
 
 
 

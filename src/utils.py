@@ -405,6 +405,11 @@ def predict_hate(model, text_embedding, image_embedding):
     """Predict if the image and text combination is hate speech."""
     with torch.no_grad():
         output = model(text_embedding, image_embedding)
+        probabilities = F.softmax(output, dim=1)
+    predicted_class = torch.argmax(output, dim=1).item()
+    prob_class_0 = probabilities[0, 0].item()
+    prob_class_1 = probabilities[0, 1].item()
+    print(f"Probability of hate: {prob_class_1:.4f}, non-hate: {prob_class_0:.4f}")
     predicted_class = torch.argmax(output, dim=1).item()
     return predicted_class
 

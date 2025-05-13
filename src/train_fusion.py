@@ -56,7 +56,8 @@ def train_model(
     criterion,
     optimizer,
     checkpoint_dir,
-    epochs=10,
+    epochs=20,
+    scheduler=None,
 ):
     num_training_steps = epochs * len(dataloader)
     progress_bar = tqdm(range(num_training_steps))
@@ -81,6 +82,9 @@ def train_model(
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+
+            if scheduler:
+                scheduler.step()
             progress_bar.update(1)
 
             total_loss += loss.item()
@@ -168,7 +172,7 @@ def main():
     df = pd.read_pickle(data_path)
 
     train_df, test_df = train_test_split(
-        df, test_size=0.15, random_state=42, stratify=df["label"]
+        df, test_size=0.2, random_state=19, stratify=df["label"]
     )
     print(f"Train size: {len(train_df)}, Test size: {len(test_df)}")
 
@@ -194,7 +198,7 @@ def main():
     model = HateClassifier(embed_dim=768).to(device)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=2e-4)
+    optimizer = optim.AdamW(model.parameters(), lr=1e-5, weight_decay=1e-6)
 
     train_model(
         model,

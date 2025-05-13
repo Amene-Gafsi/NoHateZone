@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class CrossModalAttentionBlock(nn.Module):
-    def __init__(self, embed_dim, num_heads, ff_dim, dropout=0.1):
+    def __init__(self, embed_dim, num_heads, ff_dim, dropout=0.25):
         super().__init__()
         # Cross-attention: text attends to image
         self.cross_attn_text_to_img = nn.MultiheadAttention(
@@ -66,15 +66,25 @@ class HateClassifier(nn.Module):
 
         self.pooling = nn.AdaptiveMaxPool1d(1)
 
-        self.fc1 = nn.Linear(2 * embed_dim, 512)
-        self.fc2 = nn.Linear(512, 512)
-        self.fc3 = nn.Linear(512, 256)
-        self.fc4 = nn.Linear(256, 128)
-        self.fc_out = nn.Linear(128, 2)
-        self.dropout = nn.Dropout(0.1)
+        dropout = 0.25
+        fc_dims = [512, 256, 128, 64, 32, 16]
+        self.fc_layers = nn.ModuleList()
+        input_dim = 2 * embed_dim
+        for dim in fc_dims:
+            self.fc_layers.append(
+                nn.Sequential(
+                    nn.Linear(input_dim, dim),
+                    nn.LayerNorm(dim),
+                    nn.ReLU(),
+                    nn.Dropout(dropout),
+                )
+            )
+            input_dim = dim
+
+        # self.norm1 = nn.LayerNorm(input_dim)
+        self.fc_out = nn.Linear(input_dim, 2)
 
     def forward(self, text_embeds, img_embeds):
-        # Optional: Project to shared space
         text = self.project_text(text_embeds)
         image = self.project_img(img_embeds)
 
@@ -87,10 +97,10 @@ class HateClassifier(nn.Module):
 
         # Concatenate and classify
         x = torch.cat([text_pooled, img_pooled], dim=-1)
-        x1 = F.relu(self.fc1(x))
-        x2 = F.relu(self.fc2(self.dropout(x1)) + x1)
-        x3 = F.relu(self.fc3(self.dropout(x2)))
-        x4 = F.relu(self.fc4(x3))
-        out = self.fc_out(x4)
+        
+        for layer in self.fc_layers:
+            x = layer(x)
+
+        out = self.fc_out(x)
 
         return out

@@ -20,7 +20,7 @@ def extract_frames_from_videos(HateMM_dir):
     for filename in os.listdir(hate_videos_dir):
         if filename.lower().endswith(".mp4"):
             video_name = filename.split(".")[0]
-            video_index = video_name.split("_")[2]
+            video_index = video_name.split("_")[-1]
             extract_frames(
                 os.path.join(hate_videos_dir, filename),
                 hate_frames_dir,
@@ -30,7 +30,7 @@ def extract_frames_from_videos(HateMM_dir):
     for filename in os.listdir(non_hate_videos_dir):
         if filename.lower().endswith(".mp4"):
             video_name = filename.split(".")[0]
-            video_index = video_name.split("_")[2]
+            video_index = video_name.split("_")[-1]
             extract_frames(
                 os.path.join(non_hate_videos_dir, filename),
                 non_hate_frames_dir,

@@ -5,7 +5,13 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 from tqdm import tqdm
@@ -122,6 +128,7 @@ def evaluate_model(model, dataloader, device, checkpoint_dir):
     model.eval()
     all_preds = []
     all_labels = []
+    all_probs = []
 
     with torch.no_grad():
         for text_emb, img_emb, labels in dataloader:
@@ -130,13 +137,17 @@ def evaluate_model(model, dataloader, device, checkpoint_dir):
             labels = labels.to(device)
 
             outputs = model(text_emb, img_emb)
+            probs = torch.softmax(outputs, dim=1)[:, 1]
             _, preds = torch.max(outputs, dim=1)
+            # _, preds = torch.max(outputs, dim=1)
 
             all_preds.extend(preds.cpu().numpy())
             all_labels.extend(labels.cpu().numpy())
+            all_probs.extend(probs.cpu().numpy())
 
     all_preds = np.array(all_preds)
     all_labels = np.array(all_labels)
+    all_probs = np.array(all_probs)
 
     acc = accuracy_score(all_labels, all_preds)
     precision = precision_score(all_labels, all_preds)
@@ -144,6 +155,7 @@ def evaluate_model(model, dataloader, device, checkpoint_dir):
     f1 = f1_score(all_labels, all_preds)
     pos_acc = accuracy_score(all_labels[all_labels == 1], all_preds[all_labels == 1])
     neg_acc = accuracy_score(all_labels[all_labels == 0], all_preds[all_labels == 0])
+    auc = roc_auc_score(all_labels, all_probs)
 
     print("\n Evaluation Results:")
     print(f"Accuracy : {acc:.4f}")
@@ -152,8 +164,9 @@ def evaluate_model(model, dataloader, device, checkpoint_dir):
     print(f"Precision: {precision:.4f}")
     print(f"Recall   : {recall:.4f}")
     print(f"F1 Score : {f1:.4f}")
+    print(f"AUC      : {auc:.4f}")
     log_to_file(
-        f"Evaluation Results:\nAccuracy : {acc:.4f}\nPositive Accuracy: {pos_acc:.4f}\nNegative Accuracy: {neg_acc:.4f}\nPrecision: {precision:.4f}\nRecall   : {recall:.4f}\nF1 Score : {f1:.4f}",
+        f"Evaluation Results:\nAccuracy : {acc:.4f}\nPositive Accuracy: {pos_acc:.4f}\nNegative Accuracy: {neg_acc:.4f}\nPrecision: {precision:.4f}\nRecall   : {recall:.4f}\nF1 Score : {f1:.4f}\nAUC : {auc:.4f}",
         os.path.join(checkpoint_dir, "training_log.txt"),
     )
 

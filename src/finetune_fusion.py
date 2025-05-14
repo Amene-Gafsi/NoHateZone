@@ -52,7 +52,7 @@ def main():
     print("creating model")
 
     model = HateClassifier(embed_dim=768).to(device)
-    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_epoch_8.pt")
+    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_mmh_8.pt")
     checkpoint = torch.load(pretrained_checkpoint, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
 
@@ -61,7 +61,7 @@ def main():
     optimizer = optim.AdamW(model.parameters(), lr=1e-6, weight_decay=1e-4)
     scheduler = OneCycleLR(
         optimizer,
-        max_lr=1e-4,
+        max_lr=1e-6,
         steps_per_epoch=len(dataloader),
         epochs=20,
     )

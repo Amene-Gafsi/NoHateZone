@@ -401,7 +401,7 @@ def get_text_embedding(
     return text_embedding.unsqueeze(0).to(device)  # [1, seq_len, 768]
 
 
-def predict_hate(model, text_embedding, image_embedding):
+def predict_hate(model, text_embedding, image_embedding, p=0.5):
     """Predict if the image and text combination is hate speech."""
     with torch.no_grad():
         output = model(text_embedding, image_embedding)
@@ -410,11 +410,13 @@ def predict_hate(model, text_embedding, image_embedding):
     prob_class_0 = probabilities[0, 0].item()
     prob_class_1 = probabilities[0, 1].item()
     print(f"Probability of hate: {prob_class_1:.4f}, non-hate: {prob_class_0:.4f}")
-    predicted_class = torch.argmax(output, dim=1).item()
+    # predicted_class = torch.argmax(output, dim=1).item()
+    predicted_class = 1 if prob_class_1 >= p else 0
+
     return predicted_class
 
 
-def process_frames(frames_path, hate_classifier_path, device):
+def process_frames(frames_path, hate_classifier_path, device, p):
     """ "Process the frames one by one and predict if they contain hate. The prediction is done using the frame image and the text extracted from the frame.
     Returns a list of hateful frames to blur in the final video."""
     to_blur = []
@@ -448,7 +450,7 @@ def process_frames(frames_path, hate_classifier_path, device):
         )
         print("OCR text encoded.")
 
-        predicted_class = predict_hate(hate_classifier, text_embedding, image_embedding)
+        predicted_class = predict_hate(hate_classifier, text_embedding, image_embedding, p)
         print("Predicted class:", predicted_class)
 
         if predicted_class == 1:

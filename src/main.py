@@ -22,7 +22,7 @@ def main(media_dir, checkpoints_dir):
     print("Using device:", device)
 
     finetuned_distilbert_path = os.path.join(checkpoints_dir, "distilbert_hatespeech")
-    fusion_model_path = os.path.join(checkpoints_dir, "model_epoch_12.pt")
+    fusion_model_path = os.path.join(checkpoints_dir, "model_epoch_18.pt")
 
     video_path = os.path.join(media_dir, "input", "video", "video.mp4")
     audio_path = os.path.join(media_dir, "input", "audio")
@@ -50,7 +50,7 @@ def main(media_dir, checkpoints_dir):
     censor_audio(input_audio, beep_intervals, output_audio_path)
 
     print("\nProcessing frames...")
-    to_blur = process_frames(frames_path, fusion_model_path, device)
+    to_blur = process_frames(frames_path, fusion_model_path, device, p=0.79)
 
     print("\nGenerating censored video...")
     blur_video_frames(

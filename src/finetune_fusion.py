@@ -2,10 +2,6 @@ from torch.optim.lr_scheduler import OneCycleLR
 
 from train_fusion import *
 
-# TODO
-# train with hatemm train-test split on videos not frames / crossval on lr and wd
-# log all performace metrics
-
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,7 +62,7 @@ def main():
         epochs=20,
     )
 
-    checkpoint_dir = os.path.join(root_dir, "checkpoints_finetune")
+    checkpoint_dir = os.path.join(root_dir, "checkpoints_finetune2")
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     train_model(

@@ -1,9 +1,17 @@
 import os
 import random
 
+import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import accuracy_score, f1_score
+import torch.nn.functional as F
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.model_selection import train_test_split
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, Sampler
@@ -115,20 +123,22 @@ def get_train_test_datasets(X_train, y_train, X_test, y_test, tokenizer):
 def train_model(
     model,
     train_loader,
+    test_loader,
     optimizer,
     lr_scheduler,
     num_epochs,
     device,
-    save_path_prefix="checkpoints/distilbert_hatespeech",
+    checkpoint_dir="checkpoints",
+    # save_path_prefix="checkpoints/distilbert_hatespeech",
 ):
-    os.makedirs(save_path_prefix, exist_ok=True)
-    log_file = "checkpoints/distilbert_hatespeech/training_log.txt"
+    os.makedirs(checkpoint_dir, exist_ok=True)
 
     num_training_steps = num_epochs * len(train_loader)
     progress_bar = tqdm(range(num_training_steps))
-    model.train()
 
     for epoch in range(num_epochs):
+        model.train()
+
         epoch_loss = 0
 
         for batch in train_loader:
@@ -143,65 +153,79 @@ def train_model(
             progress_bar.update(1)
             epoch_loss += loss.item()
 
-        torch.save(model.state_dict(), f"{save_path_prefix}_{epoch + 1}.pth")
+        torch.save(
+            model.state_dict(),
+            os.path.join(checkpoint_dir, f"_dbert_epoch_{epoch + 1}.pt"),
+        )
         log_message = f"[Epoch {epoch + 1}] Loss: {epoch_loss:.4f} | Saved"
-        log_to_file(log_message, log_file)
+        # log_to_file(log_message, log_file)
         print(log_message)
+        evaluate_model(model, test_loader, device, checkpoint_dir)
 
 
-def evaluate_model(model, test_loader, device):
+def evaluate_model(model, test_loader, device, checkpoint_dir):
     """
     Evaluates a text classification model's performance on a test dataset.
+
     Parameters:
     - model (torch.nn.Module): The model to be evaluated.
-    - tokenizer (transformers.PreTrainedTokenizer):
-        The tokenizer used to process the text data into a format that the model can
-        understand.
-    - test_loader (torch.utils.data.DataLoader): A DataLoader containing the test
-        dataset.
+    - test_loader (torch.utils.data.DataLoader): A DataLoader containing the test dataset.
+    - device (torch.device): The device to run the evaluation on.
+    - checkpoint_dir (str): Directory path to save the evaluation log.
+
     Returns:
-    - all_preds (torch.Tensor): A tensor containing all the predictions made by the
-        model on the test dataset.
-    - all_labels (torch.Tensor): A tensor containing all the labels in the test dataset.
-    - acc (float): The overall accuracy of the model on the test dataset.
-    - f1 (float): The F1 score of the model on the test dataset.
+    - all_preds (torch.Tensor): Predictions made by the model.
+    - all_labels (torch.Tensor): Ground truth labels.
+    - acc (float): Accuracy score.
+    - f1 (float): F1 score.
     """
-    all_labels = None
-    all_preds = None
+    all_labels = []
+    all_preds = []
+    all_probs = []
+
     model.eval()
 
     for b in tqdm(test_loader):
         inputs = {k: v.to(device) for k, v in b.items() if k != "labels"}
         labels = b["labels"].to(device)
 
-        # run the model to make the prediction
         with torch.no_grad():
-            pred = model(**inputs).logits.argmax(dim=-1)
+            logits = model(**inputs).logits
+            probs = F.softmax(logits, dim=-1)  # Probabilities
+            preds = torch.argmax(probs, dim=-1)
 
-        if all_labels is None:
-            all_labels = labels.cpu()
-            all_preds = pred.cpu()
-        else:
-            all_labels = torch.concat([all_labels, labels.cpu()])
-            all_preds = torch.concat([all_preds, pred.cpu()])
+        # all_labels.extend(labels.cpu().numpy())
+        # all_preds.extend(preds.cpu().numpy())
+        all_labels.extend(labels.cpu().view(-1).numpy())  # <-- fix here
+        all_preds.extend(preds.cpu().view(-1).numpy())
+        all_probs.extend(probs[:, 1].cpu().numpy())  # Assuming binary classification
 
-    assert len(all_preds) == len(all_labels), "Test Failed. Check your code!"
-    # compute f1 score between model predictions and ground-truth labels (you can use sklearn.metrics)
-    f1 = f1_score(all_labels, all_preds)
+    # Convert to tensors
+    all_labels = torch.tensor(all_labels)
+    all_preds = torch.tensor(all_preds)
+    all_probs = torch.tensor(all_probs)
 
-    # compute accuracy score between model predictions and ground-truth labels (you can use sklearn.metrics)
     acc = accuracy_score(all_labels, all_preds)
-
-    # compute the accuracy on Positive(label==1) samples
+    precision = precision_score(all_labels, all_preds)
+    recall = recall_score(all_labels, all_preds)
+    f1 = f1_score(all_labels, all_preds)
     pos_acc = accuracy_score(all_labels[all_labels == 1], all_preds[all_labels == 1])
-
-    # compute the accuracy on Negative(label==0) samples
     neg_acc = accuracy_score(all_labels[all_labels == 0], all_preds[all_labels == 0])
+    auc = roc_auc_score(all_labels, all_probs)
 
-    print("Accuracy: ", acc * 100, "%")
-    print(" -- Positive Accuracy: ", pos_acc * 100, "%")
-    print(" -- Negative Accuracy: ", neg_acc * 100, "%")
-    print("F1 score: ", f1)
+    print("\n Evaluation Results:")
+    print(f"Accuracy : {acc:.4f}")
+    print(f"Positive Accuracy: {pos_acc:.4f}")
+    print(f"Negative Accuracy: {neg_acc:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall   : {recall:.4f}")
+    print(f"F1 Score : {f1:.4f}")
+    print(f"AUC      : {auc:.4f}")
+
+    log_to_file(
+        f"Evaluation Results:\nAccuracy : {acc:.4f}\nPositive Accuracy: {pos_acc:.4f}\nNegative Accuracy: {neg_acc:.4f}\nPrecision: {precision:.4f}\nRecall   : {recall:.4f}\nF1 Score : {f1:.4f}\nAUC : {auc:.4f}",
+        os.path.join(checkpoint_dir, "training_dbert_log.txt"),
+    )
 
     return all_preds, all_labels, acc, f1
 
@@ -217,17 +241,21 @@ def main():
     random.seed(42)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("using device:", device)
+
+    root_dir = os.path.abspath("./NoHateZone")
+    data_path = os.path.join(root_dir, "data/HateSpeechDataset/HateSpeechDataset.csv")
+    checkpoint_dir = os.path.join(root_dir, "checkpoints_audio")
+    os.makedirs(checkpoint_dir, exist_ok=True)
+
+    print("loading model...")
 
     # Load DistilBert (https://huggingface.co/distilbert/distilbert-base-uncased)
     distilbert_tokenizer, distilbert_model = load_pretrained(
         "distilbert-base-uncased", num_labels=2, device=device
     )
 
-    # Load data
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    data_path = os.path.join(current_dir, "..", "data", "HateSpeechDataset.csv")
-    data_path = os.path.abspath(data_path)
-
+    print("loading data")
     X_train, X_test, y_train, y_test = load_data(data_path)
 
     train_data, test_data = get_train_test_datasets(
@@ -250,22 +278,29 @@ def main():
         num_training_steps=num_epochs * len(train_loader),
     )
 
+    print("training model...")
     # train the model
     train_model(
-        distilbert_model, train_loader, optimizer, lr_scheduler, num_epochs, device
+        distilbert_model,
+        train_loader,
+        test_loader,
+        optimizer,
+        lr_scheduler,
+        num_epochs,
+        device,
     )
 
-    all_preds, all_labels, acc, f1 = evaluate_model(
-        distilbert_model, test_loader, device
-    )
+    # all_preds, all_labels, acc, f1 = evaluate_model(
+    #     distilbert_model, test_loader, device
+    # )
     # Save the model
     distilbert_model.save_pretrained("checkpoints/distilbert_hatespeech")
     distilbert_tokenizer.save_pretrained("checkpoints/distilbert_hatespeech")
 
-    log_to_file(
-        f"[Evaluation] Accuracy: {acc * 100:.2f}%, F1: {f1:.4f}",
-        "checkpoints/training_log.txt",
-    )
+    # log_to_file(
+    #     f"[Evaluation] Accuracy: {acc * 100:.2f}%, F1: {f1:.4f}",
+    #     "checkpoints/training_log.txt",
+    # )
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 import subprocess
+import textwrap
 
 import audio_extract
 import cv2
@@ -13,6 +14,7 @@ import torch.nn.functional as F
 from PIL import Image, ImageFilter
 from pydub import AudioSegment
 from pydub.generators import Sine
+from tabulate import tabulate
 from transformers import (
     AutoModel,
     AutoTokenizer,
@@ -220,8 +222,15 @@ def classify_sentences(text, model_path):
                 "prob_class_1": prob_class_1,
             }
         )
+    df = pd.DataFrame(labels)
+    df_display = df[["sentence", "label", "prob_class_1"]].copy()
+    df_display["sentence"] = df_display["sentence"].apply(
+        lambda s: wrap_text(s, width=60)
+    )
 
-    return pd.DataFrame(labels)
+    print(tabulate(df_display, headers="keys", tablefmt="grid", showindex=False))
+
+    return df
 
 
 def convert_to_min_sec(beep_intervals):
@@ -265,10 +274,12 @@ def find_beep_intervals(df, transcription):
             if window == sentence_words:
                 start_time = transcript_words[i]["start"]
                 end_time = transcript_words[i + len(sentence_words) - 1]["end"]
+                if (end_time - start_time) <= 0.5:
+                    continue
                 beep_intervals.append((start_time, end_time))
-                # print(
-                #     f"[MATCH] '{sentence}' → BEEP from {start_time:.2f}s to {end_time:.2f}s"
-                # )
+                print(
+                    f"[MATCH] '{sentence}' → BEEP from {start_time:.2f}s to {end_time:.2f}s"
+                )
     beep_intervals = clean_beep_intervals(beep_intervals)
     print("Beeping :", convert_to_min_sec(beep_intervals))
     return beep_intervals
@@ -450,7 +461,9 @@ def process_frames(frames_path, hate_classifier_path, device, p):
         )
         print("OCR text encoded.")
 
-        predicted_class = predict_hate(hate_classifier, text_embedding, image_embedding, p)
+        predicted_class = predict_hate(
+            hate_classifier, text_embedding, image_embedding, p
+        )
         print("Predicted class:", predicted_class)
 
         if predicted_class == 1:
@@ -562,3 +575,44 @@ def clean_up(audio_path, frames_path, output_audio):
         shutil.rmtree(output_audio)
 
     print("Cleaned up temporary files.")
+
+
+def wrap_text(text, width=60):
+    return "\n".join(textwrap.wrap(text, width))
+
+
+def classify_video(df, to_blur, beep_intervals):
+    """
+    Classifies the video as Hateful or Clean based on thresholds.
+
+    Criteria:
+        - At least 3 hateful sentences
+        - At least 3 frames to blur
+
+    Args:
+        df (pd.DataFrame): DataFrame with sentence classification results.
+        to_blur (list): List of frame indices or filenames marked for blurring.
+
+    Returns:
+        dict: Classification summary.
+    """
+    num_hateful_sentences = len(beep_intervals)
+    num_blurred_frames = len(to_blur)
+
+    high_confidence_hate = df["prob_class_1"] > 0.8
+    num_high_confidence = high_confidence_hate.sum()
+
+    video_is_hateful = (
+        num_hateful_sentences >= 5
+        or num_blurred_frames >= 15
+        or num_high_confidence >= 3
+    )
+
+    print("\n=== Video Classification Summary ===")
+    print("Number of hateful sentences:", num_hateful_sentences)
+    print("Number of high confidence hate sentences:", num_high_confidence)
+    print("Number of hateful frames:", num_blurred_frames)
+    print("Video is hateful:", video_is_hateful)
+    print("=====================================")
+
+    return video_is_hateful

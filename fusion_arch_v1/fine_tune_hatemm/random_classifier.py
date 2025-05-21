@@ -25,7 +25,6 @@ def load_dataframe():
 # =============================================================================
 
 def compute_metrics(y_true, y_prob, threshold=0.5):
-    # random predictions via fixed 0.5 threshold
     y_pred = (y_prob >= threshold).astype(int)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
     return {
@@ -46,7 +45,7 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df = load_dataframe()
-    seeds = list(range(20))
+    seeds = list(range(5))
     k_folds = 5
 
     final_metrics = {}
@@ -65,27 +64,23 @@ def main():
         df_test = df[df['video_group'].isin(test_groups)]
         df_train_val = df[~df['video_group'].isin(test_groups)]
 
-        # Build folds (we only use them to draw random val scores)
+        # Build folds (for val, unused here)
         folds = list(
             GroupKFold(n_splits=k_folds)
             .split(df_train_val, groups=df_train_val['video_group'])
         )
 
-        # Collect random validation‐set scores (unused for thresholding)
+        # generate & discard random validation scores
         for tr_idx, val_idx in folds:
-            df_val = df_train_val.iloc[val_idx]
-            # purely random scores
-            _ = np.random.rand(len(df_val))  # throwaway
+            _ = np.random.rand(len(val_idx))
 
-        # Now evaluate on TEST set with purely random 0–1 scores
+        # evaluate on test with purely random scores
         y_test = df_test['label'].values
         p_test = np.random.rand(len(df_test))
 
-        # Fix threshold=0.5
         tm = compute_metrics(y_test, p_test, threshold=0.5)
         final_metrics[seed] = tm
 
-        # Also collect ROC curve for this seed
         fpr, tpr, _ = roc_curve(y_test, p_test)
         seed_rocs[seed] = (fpr, tpr)
 
@@ -97,18 +92,20 @@ def main():
               f"Rec={tm['recall']:.4f}  "
               f"Macro-F1={tm['macro_f1']:.4f}")
 
-    # Save per-seed metrics
+    # assemble DataFrame
     df_metrics = pd.DataFrame.from_dict(final_metrics, orient='index')
     df_metrics.index.name = 'seed'
     df_metrics.to_csv(out_dir/'test_metrics.csv')
 
-    # Print averaged metrics
-    avg = df_metrics.mean()
-    print("\nAverage across seeds:")
-    for m, v in avg.items():
-        print(f"  {m:10s}: {v:.4f}")
+    # compute mean and std
+    mean_metrics = df_metrics.mean()
+    std_metrics  = df_metrics.std()
 
-    # Plot ROC per seed
+    print("\nAverage across seeds:")
+    for m in df_metrics.columns:
+        print(f"  {m:10s}: {mean_metrics[m]:.4f} ± {std_metrics[m]:.4f}")
+
+    # plot ROC per seed
     plt.figure(figsize=(8,6))
     for seed, (fpr, tpr) in seed_rocs.items():
         plt.plot(fpr, tpr, lw=1.5, label=f"Seed {seed}")

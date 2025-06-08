@@ -18,17 +18,9 @@ from transformers import (
     DistilBertTokenizer,
 )
 
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'train')))
 from bert_finetune import get_train_test_datasets, load_data
-
-
-# Evaluation Results: random_state=42
-# Accuracy : 0.8960
-# Positive Accuracy: 0.7487
-# Negative Accuracy: 0.9282
-# Precision: 0.6950
-# Recall   : 0.7487
-# F1 Score : 0.7209
-# AUC      : 0.9389
 
 
 def evaluate_model(model, test_loader, device):
@@ -93,10 +85,12 @@ def evaluate_model(model, test_loader, device):
 
 
 def main():
-    root_dir = os.path.abspath("./NoHateZone")
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..") 
+    
     data_path = os.path.join(root_dir, "data/HateSpeechDataset/HateSpeechDataset.csv")
     model_path = os.path.join(
-        root_dir, "checkpoints_pretrained_MMH/distilbert_hatespeech"
+        root_dir, "checkpoints/distilbert_hatespeech"
     )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

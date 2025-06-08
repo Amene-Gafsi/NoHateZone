@@ -1,13 +1,11 @@
-from train_fusion import *
+import sys
+import os
 
-# Best threshold from validation data: 0.21
-# Accuracy         : 0.7638
-# Positive Accuracy: 0.7446
-# Negative Accuracy: 0.7745
-# Precision        : 0.6464
-# Recall           : 0.7446
-# F1 Score         : 0.6920
-# AUC              : 0.8019
+import pandas as pd
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "train")))
+
+from train_fusion import *
 
 
 def find_best_threshold(y_true, y_probs):
@@ -24,7 +22,8 @@ def find_best_threshold(y_true, y_probs):
             best_f1 = f1
             best_thresh = t
 
-    return best_thresh, best_f1 
+    return best_thresh, best_f1
+
 
 def get_probs_and_labels(dataloader, model, device):
     all_labels, all_probs = [], []
@@ -47,15 +46,16 @@ def main():
     print("using device:", device)
 
     print("loading data")
-    root_dir = os.path.abspath("./NoHateZone")
+
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..")
     data_path = os.path.join(root_dir, "data/HateMM/HateMM/embeddings_hatemm.pkl")
 
-    checkpoint_dir = os.path.join(root_dir, "checkpoints_finetune_hatemm")
-    os.makedirs(checkpoint_dir, exist_ok=True)
+    checkpoint_dir = os.path.join(root_dir, "checkpoints/hmm_modelseeds")
 
     df = pd.read_pickle(data_path)
 
-    # train-test split on videos rather than frames
+    # train-test split on videos rather than frames same seed as training
     df["videoID"] = df["frameID"].apply(lambda x: "_".join(x.split("_")[:-1]))
     unique_videos = df["videoID"].unique()
     train_videos, temp_videos = train_test_split(
@@ -84,7 +84,7 @@ def main():
 
     print("creating model")
     model = HateClassifier(embed_dim=768).to(device)
-    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_epoch_18.pt")
+    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_epoch_16_seed1000.pt")
     checkpoint = torch.load(pretrained_checkpoint, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
@@ -101,9 +101,14 @@ def main():
     test_labels, test_probs = get_probs_and_labels(test_dataloader, model, device)
     final_preds = (test_probs >= best_thresh).astype(int)
 
+    roc_df = pd.DataFrame({"true_label": test_labels, "predicted_prob": test_probs})
+    roc_df.to_csv(os.path.join(checkpoint_dir, "roc_1000.csv"), index=False)
+    print("Saved ROC data to roc_data_epoch16.csv")
+
     precision = precision_score(test_labels, final_preds)
     recall = recall_score(test_labels, final_preds)
     f1 = f1_score(test_labels, final_preds)
+    macro_f1 = f1_score(test_labels, final_preds, average="macro")
     acc = accuracy_score(test_labels, final_preds)
     auc = roc_auc_score(test_labels, test_probs)
     pos_acc = accuracy_score(
@@ -120,6 +125,7 @@ def main():
     print(f"Precision        : {precision:.4f}")
     print(f"Recall           : {recall:.4f}")
     print(f"F1 Score         : {f1:.4f}")
+    print(f"Macro F1 Score   : {macro_f1:.4f}")
     print(f"AUC              : {auc:.4f}")
 
 

@@ -3,6 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils')))
 from utils import load_data
 
 
@@ -55,8 +57,8 @@ def get_clean_data(vit_embeddings_path, ocr_embeddings_path, labels_path):
 
 
 def main():
-    # root_dir = os.path.abspath("../../NoHateZone/data")
-    root_dir = os.path.abspath("./NoHateZone/data/MMHS150K")
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../../data/MMHS150K")
     vit_embeddings_path = os.path.join(root_dir, "vit_embeddings.npy")
     ocr_embeddings_path = os.path.join(root_dir, "tweet_ocr_embeddings.npy")
     labels_path = os.path.join(root_dir, "MMHS150K_GT.json")
@@ -66,7 +68,6 @@ def main():
 
     print(f"Shape of the DataFrame: {df.shape}")
 
-    # df.to_csv(os.path.join(root_dir, "fusion_data.csv"), index=False)
     df.to_pickle(os.path.join(root_dir, "fusion_data.pkl"))
 
 

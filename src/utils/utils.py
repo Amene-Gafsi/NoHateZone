@@ -22,7 +22,17 @@ from transformers import (
     DistilBertTokenizer,
 )
 
-from audio2text import AudioTranscriber
+from .audio2text import AudioTranscriber
+
+import sys
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "embedding"))
+)
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models"))
+)
+
 from encode_images import load_model as load_image_model
 from encode_tweets import load_model as load_tweet_model
 from fusion_model import HateClassifier

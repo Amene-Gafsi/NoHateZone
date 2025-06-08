@@ -63,7 +63,8 @@ def process_dataframe(df, tokenizer, model, device="cpu"):
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    root_dir = os.path.abspath("./NoHateZone/data/MMHS150K")  # <-- changed this line
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../../data/MMHS150K")
     csv_path = os.path.join(root_dir, "tweet_ocr_dataset.csv")
     output_path = os.path.join(root_dir, "tweet_ocr_embeddings.npy")
 

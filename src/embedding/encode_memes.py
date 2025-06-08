@@ -5,6 +5,8 @@ import re
 import pandas as pd
 from IPython.display import display
 
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils')))
 from utils import load_data
 
 
@@ -46,7 +48,8 @@ def save_dataframe(df, output_path):
 
 
 def main():
-    root_dir = os.path.abspath("./NoHateZone/data/MMHS150K")  # <-- changed this line
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../../data/MMHS150K")
     json_path = os.path.join(root_dir, "MMHS150K_GT.json")
     img_txt_dir = os.path.join(root_dir, "img_txt")
     output_csv_path = os.path.join(root_dir, "tweet_ocr_dataset.csv")

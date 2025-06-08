@@ -1,12 +1,14 @@
 import os
 
+import encode_images as ei
+import encode_tweets as et
 import numpy as np
 import pandas as pd
 import torch
 from tqdm import tqdm
 
-import encode_images as ei
-import encode_tweets as et
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils')))
 from utils import extract_frames
 
 
@@ -144,7 +146,8 @@ def merge_embeddings(frame_embeddings, ocr_embeddings, df):
 
 
 def main():
-    hateMM_dir = "./NoHateZone/data/HateMM/HateMM/"
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    hateMM_dir = os.path.join(root_path, "../../data/HateMM/HateMM/")
     df = pd.read_csv(os.path.join(hateMM_dir, "processed_hatemm.csv"))
 
     extract_frames_from_videos(hateMM_dir)

@@ -243,9 +243,10 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("using device:", device)
 
-    root_dir = os.path.abspath("./NoHateZone")
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..")
     data_path = os.path.join(root_dir, "data/HateSpeechDataset/HateSpeechDataset.csv")
-    checkpoint_dir = os.path.join(root_dir, "checkpoints_audio")
+    checkpoint_dir = os.path.join(root_dir, "checkpoints/distilbert_hatespeech")
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     print("loading model...")
@@ -290,17 +291,9 @@ def main():
         device,
     )
 
-    # all_preds, all_labels, acc, f1 = evaluate_model(
-    #     distilbert_model, test_loader, device
-    # )
     # Save the model
-    distilbert_model.save_pretrained("checkpoints/distilbert_hatespeech")
-    distilbert_tokenizer.save_pretrained("checkpoints/distilbert_hatespeech")
-
-    # log_to_file(
-    #     f"[Evaluation] Accuracy: {acc * 100:.2f}%, F1: {f1:.4f}",
-    #     "checkpoints/training_log.txt",
-    # )
+    distilbert_model.save_pretrained(checkpoint_dir)
+    distilbert_tokenizer.save_pretrained(checkpoint_dir)
 
 
 if __name__ == "__main__":

@@ -15,7 +15,13 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 from tqdm import tqdm
+from sklearn.utils.class_weight import compute_class_weight
 
+import sys
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models"))
+)
 from fusion_model import HateClassifier
 
 
@@ -176,16 +182,17 @@ def main():
     print("using device:", device)
 
     print("loading data")
-    root_dir = os.path.abspath("./NoHateZone")
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..")
     data_path = os.path.join(root_dir, "data/MMHS150K/fusion_data.pkl")
-    checkpoint_dir = os.path.join(root_dir, "checkpoints")
+    checkpoint_dir = os.path.join(root_dir, "checkpoints/pretrained_MMH")
     os.makedirs(checkpoint_dir, exist_ok=True)
 
-    # data_path = "../data/MMHS150K/fusion_data.pkl"  # TODO
+    # data_path = "../data/MMHS150K/fusion_data.pkl"
     df = pd.read_pickle(data_path)
 
     train_df, test_df = train_test_split(
-        df, test_size=0.2, random_state=19, stratify=df["label"]
+        df, test_size=0.1, random_state=19, stratify=df["label"]
     )
     print(f"Train size: {len(train_df)}, Test size: {len(test_df)}")
 
@@ -210,7 +217,13 @@ def main():
     print("creating model")
     model = HateClassifier(embed_dim=768).to(device)
 
+    # We experimented with wheighted loss, but it didn't improve performance
+    # weights = [0.7, 1.0]
+    # class_weights = torch.FloatTensor(weights)
+    # print("Class weights:", class_weights)
+
     criterion = nn.CrossEntropyLoss()
+
     optimizer = optim.AdamW(model.parameters(), lr=1e-5, weight_decay=1e-6)
 
     train_model(
@@ -224,9 +237,9 @@ def main():
         epochs=20,
     )
 
-    final_model_path = os.path.join(checkpoint_dir, "final_model.pt")
-    torch.save(model.state_dict(), final_model_path)
-    print(f"Final model saved to {final_model_path}")
+    # final_model_path = os.path.join(checkpoint_dir, "final_model.pt")
+    # torch.save(model.state_dict(), final_model_path)
+    # print(f"Final model saved to {final_model_path}")
 
     evaluate_model(model, test_dataloader, device, checkpoint_dir)
 

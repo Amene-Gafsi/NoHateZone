@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'train')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "train")))
 
 from train_fusion import *
 
@@ -13,7 +13,7 @@ def find_best_threshold(y_true, y_probs):
     thresholds = np.linspace(0.0, 1.0, 5000)
     for t in thresholds:
         y_pred = (y_probs >= t).astype(int)
-        f1 = f1_score(y_true, y_pred)
+        f1 = f1_score(y_true, y_pred, average="macro")
         # print(f"Threshold: {t:.2f}, F1 Score: {f1:.4f}")
 
         if f1 > best_f1:
@@ -45,7 +45,7 @@ def main():
 
     print("loading data")
     root_path = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.join(root_path, "../..")        
+    root_dir = os.path.join(root_path, "../..")
     data_path = os.path.join(root_dir, "data/MMHS150K/fusion_data.pkl")
 
     checkpoint_dir = os.path.join(root_dir, "checkpoints/pretrained_MMH")
@@ -54,10 +54,10 @@ def main():
     df = pd.read_pickle(data_path)
 
     train_df, temp_df = train_test_split(
-        df, test_size=0.2, random_state=19, stratify=df["label"]
+        df, test_size=0.1, random_state=19, stratify=df["label"]
     )
 
-    val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=19)
+    val_df, test_df = train_test_split(temp_df, test_size=0.6675, random_state=19)
 
     print(f"val size: {len(val_df)}, Test size: {len(test_df)}")
 
@@ -73,7 +73,7 @@ def main():
 
     print("creating model")
     model = HateClassifier(embed_dim=768).to(device)
-    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_mmh_8.pt")
+    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_epoch_6.pt")
     checkpoint = torch.load(pretrained_checkpoint, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()

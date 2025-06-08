@@ -72,7 +72,8 @@ def load_embeddings(output_path):
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    root_dir = os.path.abspath("./NoHateZone/data/MMHS150K")
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../../data/MMHS150K")
     json_path = os.path.join(root_dir, "MMHS150K_GT.json")
     img_dir = os.path.join(root_dir, "img_resized")
     output_path = os.path.join(root_dir, "vit_embeddings.npy")

@@ -6,9 +6,8 @@ import pandas as pd
 import torch
 from transformers.utils import logging
 
-from utils import *
+from utils.utils import *
 
-# Remove warnings
 warnings.filterwarnings("ignore")
 logging.set_verbosity_error()
 
@@ -22,7 +21,7 @@ def main(media_dir, checkpoints_dir):
     print("Using device:", device)
 
     finetuned_distilbert_path = os.path.join(checkpoints_dir, "distilbert_hatespeech")
-    fusion_model_path = os.path.join(checkpoints_dir, "model_hatemm_11.pt")
+    fusion_model_path = os.path.join(checkpoints_dir, "finetuned_HMM/model_hatemm_11.pt")
 
     video_path = os.path.join(media_dir, "input", "video", "video.mp4")
     audio_path = os.path.join(media_dir, "input", "audio")
@@ -64,6 +63,7 @@ def main(media_dir, checkpoints_dir):
     print("\nCleaning up...")
     clean_up(audio_path, frames_path, output_audio)
 
+    # We also provilde the option to classify the entire video based on the frames-audio results
     # classify_video(df, to_blur, beep_intervals)
 
 

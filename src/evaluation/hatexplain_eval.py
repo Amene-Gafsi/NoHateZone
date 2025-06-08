@@ -20,15 +20,6 @@ from transformers import (
 )
 
 
-# Evaluation Results:
-# Accuracy : 0.6902
-# Positive Accuracy: 0.7469
-# Negative Accuracy: 0.6074
-# Precision: 0.7353
-# Recall   : 0.7469
-# F1 Score : 0.7411
-# AUC      : 0.7456
-
 class HateXplain(TorchDataset):
     def __init__(self, texts, labels, tokenizer):
         self.encodings = tokenizer(
@@ -123,10 +114,10 @@ def evaluate_model(model, test_loader, device):
 
 
 def main():
-    root_dir = os.path.abspath("./NoHateZone")
-    model_path = os.path.join(
-        root_dir, "checkpoints_pretrained_MMH/distilbert_hatespeech"
-    )
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..")
+
+    model_path = os.path.join(root_dir, "checkpoints/distilbert_hatespeech")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
@@ -137,13 +128,10 @@ def main():
     print("loading data")
 
     dataset = load_dataset("Hate-speech-CNERG/hatexplain", trust_remote_code=True)
-    # df_train = pd.DataFrame(dataset["train"])
     df_test = pd.DataFrame(dataset["test"])
 
-    # df_train = process_hatexplain(df_train)
     df_test = process_hatexplain(df_test)
 
-    # train_data = HateXplain(df_train["Content"].tolist(),  df_train["Label"].tolist(), tokenizer)
     test_data = HateXplain(
         df_test["Content"].tolist(), df_test["Label"].tolist(), distilbert_tokenizer
     )

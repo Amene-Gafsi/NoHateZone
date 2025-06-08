@@ -7,11 +7,11 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import accuracy_score, f1_score
-from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 from tqdm import tqdm
 
-from crossval_model import HateClassifier
+from .crossval_model import HateClassifier
 
 
 class CrossModalDataset(Dataset):
@@ -129,24 +129,29 @@ def main():
     print("using device:", device)
 
     print("loading data")
-    root_dir = os.path.abspath("./NoHateZone")
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..")
+
     data_path = os.path.join(root_dir, "data/MMHS150K/fusion_data.pkl")
-    checkpoint_dir = os.path.join(root_dir, "checkpoints_val")
+    checkpoint_dir = os.path.join(root_dir, "checkpoints/eval")
     os.makedirs(checkpoint_dir, exist_ok=True)
 
-    # data_path = "../data/MMHS150K/fusion_data.pkl"
     df = pd.read_pickle(data_path)
 
     print(f"df size: {len(df)}")
 
     # cross validation
-    weight_decays = [1e-6]
-    learning_rates = [1e-5]
-    dropouts = [0.25]
+    weight_decays = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 0]
+    learning_rates = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
+    dropouts = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5]
 
-    num_heads = [4]
-    fc_dims = [(512, 256, 128, 64, 32, 16)]
-    arch = [1]
+    num_heads = [2, 4, 8]
+    fc_dims = [
+        (512, 512, 128, 128, 32, 32),
+        (512, 128, 32),
+        (512, 256, 128, 64, 32, 16),
+    ]
+    arch = [0, 1]
 
     best_f1 = 0
     best_params = {}
@@ -204,6 +209,7 @@ def main():
                 dropout=dropout,
                 num_heads=num_head,
                 fc_dims=fc_dim,
+                arch=arch,
             ).to(device)
 
             criterion = nn.CrossEntropyLoss()

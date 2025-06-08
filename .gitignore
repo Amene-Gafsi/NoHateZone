@@ -1,6 +1,5 @@
 __pycache__/
 external_data
-input
 Fine_tuning_TrOCR
 data_proc/input
 data_proc/processed

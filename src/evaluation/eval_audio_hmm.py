@@ -96,7 +96,7 @@ def main():
     root_path = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.join(root_path, "../..")
     model_path = os.path.join(root_dir, "checkpoints/distilbert_hatespeech")
-    dataset_path = os.path.join(root_dir, "data/labeled_audio_chunks.csv")
+    dataset_path = os.path.join(root_dir, "data/hatemm_audio_testset.csv")
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print("Using device:", device)
 

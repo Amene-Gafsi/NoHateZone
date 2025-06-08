@@ -184,8 +184,8 @@ if __name__ == "__main__":
     )
     # -------------------------------------------------------------------
     AUDIO_ROOT = "audio_extracted"
-    ANNO_XLSX = "/home/gafsi/NoHateZone/src/filtered_hateMM_annotation_final.xlsx"
-    OUTPUT_CSV = "labeled_audio_chunks.csv"
+    ANNO_XLSX = "/home/gafsi/NoHateZone/src/hatemm_audio_ts_labels.xlsx"
+    OUTPUT_CSV = "hatemm_audio_testset.csv"
 
     # test-mode: pick first 3 of each
     TEST_MODE = False

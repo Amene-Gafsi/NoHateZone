@@ -3,7 +3,7 @@ import random
 import numpy as np
 import torch
 
-from .train_fusion import *
+from train_fusion import *
 
 
 def eval_model(model, dataloader, device, checkpoint_dir):

@@ -6,41 +6,66 @@
 │
 ├── data/
 │   ├── HateMM/
-│   │   └── HateMM_annotation_adjusted.xlsx: is the updated HateMM data including the modality- │   │       specific labels
+│   │   └── HateMM_annotation_adjusted.xlsx: is the updated HateMM data including the modality-specific labels
 │   └── MMHS150K/
 │       └── Includes memes data and corresponding embeddings       
 │
 │
 ├── main_process/
-│   ├── frame_audio_decomposer.py: decomposes the video into audio chunks and frames extracted │   │   per second
+│   ├── frame_audio_decomposer.py: decomposes the video into audio chunks and frames extracted per second
 │   │    
 │   ├── audio2text.py & utils.py: includes helper functions and model imports
 │   │   
-│   ├── chunk_frame_generator.py: generates the frames with 1-second frequency and extracts     │   │   the corresponding texts using OCR
+│   ├── chunk_frame_generator.py: generates the frames with 1-second frequency and extracts the corresponding texts using OCR
 │   │
-│   ├── chunk_labeller_with_intervals.ipynb: gets the data ready to acquire the performance     │   │   metrics for our fine-tuned DistillBERT (DBertXhate)
+│   ├── chunk_labeller_with_intervals.ipynb: gets the data ready to acquire the performance metrics for our fine-tuned DistillBERT (DBertXhate)
 │   │
-│   └── .csv and .xslx files: are intermediary files to get the embeddings for model training
+│   └── .csv and .xslx files: intermediary files to get the embeddings for model training
 │
 │
 ├── src/
 │   ├── embedding/
 │   │   ├── audio_image_combiner.ipnyb: selects a random image given the audio chunk intervals
 │   │   │
-│   │   └── other .py files: get the embeddings (768 x 1) for HateMM and MMHS150K using our ViT │   │       and DistillBERT
-│   ├── models   
+│   │   └── other .py files: get the embeddings (768 x 1) for HateMM and MMHS150K using our ViT and DistillBERT
 │   │
+│   ├── models/   
+│   │   ├── crossval_model.py:
+│   │   │
+│   │   └── fusion_model.py:
 │   │
+│   ├── tests/
+│   │   └──
 │   │
+│   ├── train/
+│   │   ├── bert_finetune.py: training file for DistillBERT fine-tuning using the HateSpeechDataset for detecting hate in audio transcriptions
+│   │   │
+│   │   ├── crossval_train.py:
+│   │   │
+│   │   ├── fine_tune_SCMA.py: SCMA fusion architecture fine-tuned on HateMM data (audio + image + OCR text)
+│   │   │
+│   │   ├── finetune_fusion.py: DCMA fusion architecture fine-tuned on HateMM data (image + OCR text)
+│   │   │
+│   │   ├── fusion_arch_v3.py: SCMA fusion architecture pre-trained on memes dataset (MMHS150K)
+│   │   │
+│   │   ├── train_fusion.py: DCMA fusion architecture pre-trained on memes dataset (MMHS150K)
+│   │   │
+│   │   └── random_classifier.py: Random classifier tested on HateMM data (image + OCR text)
+│   │   
+│   │     
+│   ├── evaluation/
+│   ├── HateMM/
+│   │   └── HateMM_annotation_adjusted.xlsx: is the updated HateMM data including the modality-specific labels
+│   │   └── MMHS150K/
+│   │    └── Includes memes data and corresponding embeddings
 │   │
-│   │
+│   │  
+│   ├── utils/
+│   │   └──
+
+ 
 
 
-
-
-│   └── module2.py
-└── tests/
-    └── test_module1.py
 ```
 
 ## Dataset Licenses

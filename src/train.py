@@ -8,7 +8,7 @@ def run_script(script_name):
     root_dir = os.path.join(root_path, "train")
 
     script_path = os.path.join(root_dir, script_name)
-    subprocess.run(["python3", script_path], check=True)
+    subprocess.run(["python", script_path], check=True)
 
 
 if __name__ == "__main__":

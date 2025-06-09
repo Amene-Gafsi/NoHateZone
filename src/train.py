@@ -4,8 +4,11 @@ import subprocess
 
 
 def run_script(script_name):
-    script_path = os.path.join("train", script_name)
-    subprocess.run(["python", script_path], check=True)
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "train")
+
+    script_path = os.path.join(root_dir, script_name)
+    subprocess.run(["python3", script_path], check=True)
 
 
 if __name__ == "__main__":

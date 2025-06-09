@@ -2,6 +2,8 @@
 
 ## File Structure
 ```text
+│
+│
 ├── README.md
 │
 ├── data/
@@ -64,11 +66,20 @@
 │   │   └── other .py files for evaluation purposes
 │   │
 │   ├── utils/
-│   │   └── includes the helper functions
+│       └── includes the helper functions
 │
 │
 ├── media/
-│   ├── 'input/video'/ 
+│   ├── 'input/video'/
+│   │    └── includes the input video for inference
+│   └── 'output/video'/
+│       └── includes the censored video  
+│
+│
+├── submission/
+│   └── includes the necessary files for project submission
+│
+│
 
 
 ```

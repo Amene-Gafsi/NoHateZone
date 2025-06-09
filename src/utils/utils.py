@@ -3,7 +3,13 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import textwrap
+
+sys.modules["flash_attn"] = None
+sys.modules["flash_attn_2_cuda"] = None
+
+import sys
 
 import audio_extract
 import cv2
@@ -23,8 +29,6 @@ from transformers import (
 )
 
 from .audio2text import AudioTranscriber
-
-import sys
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "embedding"))

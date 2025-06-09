@@ -178,13 +178,20 @@ if __name__ == "__main__":
     # HATE_DIR = "try_hate"
     # NON_HATE_DIR = "try_non_hate"
     # -----------------paths to hate and non-hate videos-----------------
-    HATE_DIR = "/home/gafsi/NoHateZone/data/HateMM/HateMM/hate_videos/hate_videos"
-    NON_HATE_DIR = (
-        "/home/gafsi/NoHateZone/data/HateMM/HateMM/non_hate_videos/non_hate_videos"
+    # HATE_DIR = "/home/gafsi/NoHateZone/data/HateMM/HateMM/hate_videos/hate_videos"
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.join(root_path, "../..")
+    HATE_DIR = os.path.join(root_dir, "data/HateMM/HateMM/hate_videos/hate_videos")
+    # NON_HATE_DIR = (
+    #     "/home/gafsi/NoHateZone/data/HateMM/HateMM/non_hate_videos/non_hate_videos"
+    # )
+    NON_HATE_DIR = os.path.join(
+        root_dir, "data/HateMM/HateMM/non_hate_videos/non_hate_videos"
     )
     # -------------------------------------------------------------------
     AUDIO_ROOT = "audio_extracted"
-    ANNO_XLSX = "/home/gafsi/NoHateZone/src/hatemm_audio_ts_labels.xlsx"
+    # ANNO_XLSX = "/home/gafsi/NoHateZone/src/hatemm_audio_ts_labels.xlsx"
+    ANNO_XLSX = os.path.join(root_dir, "data/HateMM/hatemm_audio_ts_labels.xlsx")
     OUTPUT_CSV = "hatemm_audio_testset.csv"
 
     # test-mode: pick first 3 of each

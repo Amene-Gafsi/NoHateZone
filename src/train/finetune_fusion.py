@@ -71,7 +71,7 @@ def main():
     root_path = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.join(root_path, "../..")
 
-    data_path = os.path.join(root_dir, "data/HateMM/HateMM/embeddings_hatemm.pkl")
+    data_path = os.path.join(root_dir, "data/HateMM/embeddings_hatemm.pkl")
 
     checkpoint_dir = os.path.join(root_dir, "checkpoints/pretrained_MMH")
     os.makedirs(checkpoint_dir, exist_ok=True)

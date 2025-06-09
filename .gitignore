@@ -4,3 +4,4 @@ external_data
 Fine_tuning_TrOCR
 data_proc/input
 data_proc/processed
+data

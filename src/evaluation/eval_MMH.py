@@ -73,7 +73,7 @@ def main():
 
     print("creating model")
     model = HateClassifier(embed_dim=768).to(device)
-    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_epoch_6.pt")
+    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_mmh.pt")
     checkpoint = torch.load(pretrained_checkpoint, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()

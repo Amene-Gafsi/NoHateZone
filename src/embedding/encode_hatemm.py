@@ -147,7 +147,7 @@ def merge_embeddings(frame_embeddings, ocr_embeddings, df):
 
 def main():
     root_path = os.path.dirname(os.path.abspath(__file__))
-    hateMM_dir = os.path.join(root_path, "../../data/HateMM/HateMM/")
+    hateMM_dir = os.path.join(root_path, "../../data/HateMM/")
     df = pd.read_csv(os.path.join(hateMM_dir, "processed_hatemm.csv"))
 
     extract_frames_from_videos(hateMM_dir)

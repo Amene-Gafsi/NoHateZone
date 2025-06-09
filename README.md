@@ -84,13 +84,4 @@
 
 ```
 
-## Dataset Licenses
-
- - HateMM license:
-https://creativecommons.org/licenses/by/4.0/legalcode
- - HateXplain license:
-https://github.com/hate-alert/HateXplain?tab=MIT-1-ov-file
-
-## Model Licenses
-
 

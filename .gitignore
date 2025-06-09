@@ -1,4 +1,5 @@
 __pycache__/
+checkpoints
 external_data
 Fine_tuning_TrOCR
 data_proc/input

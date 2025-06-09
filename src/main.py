@@ -21,7 +21,9 @@ def main(media_dir, checkpoints_dir):
     print("Using device:", device)
 
     finetuned_distilbert_path = os.path.join(checkpoints_dir, "distilbert_hatespeech")
-    fusion_model_path = os.path.join(checkpoints_dir, "finetuned_HMM/model_hatemm_11.pt")
+    fusion_model_path = os.path.join(
+        checkpoints_dir, "finetuned_HMM/model_hatemm_11.pt"
+    )
 
     video_path = os.path.join(media_dir, "input", "video", "video.mp4")
     audio_path = os.path.join(media_dir, "input", "audio")
@@ -72,13 +74,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--media_dir",
         type=str,
-        required=True,
+        # required=True,
+        default="../media",
         help="Path to the media directory (containing input/output folders)",
     )
     parser.add_argument(
         "--checkpoints_dir",
         type=str,
-        required=True,
+        # required=True,
+        default="../checkpoints",
         help="Path to the directory containing model checkpoints",
     )
     args = parser.parse_args()

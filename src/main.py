@@ -21,9 +21,7 @@ def main(media_dir, checkpoints_dir):
     print("Using device:", device)
 
     finetuned_distilbert_path = os.path.join(checkpoints_dir, "distilbert_hatespeech")
-    fusion_model_path = os.path.join(
-        checkpoints_dir, "finetuned_HMM/model_hatemm_11.pt"
-    )
+    fusion_model_path = os.path.join(checkpoints_dir, "finetuned_HMM/model_hatemm.pt")
 
     video_path = os.path.join(media_dir, "input", "video", "video.mp4")
     audio_path = os.path.join(media_dir, "input", "audio")
@@ -50,6 +48,7 @@ def main(media_dir, checkpoints_dir):
     censor_audio(input_audio, beep_intervals, output_audio_path)
 
     print("\nProcessing frames...")
+    # adjsut the classification threshold p depending on how conservative you want the censoring to be
     to_blur = process_frames(frames_path, fusion_model_path, device, p=0.5)
 
     print("\nGenerating censored video...")
@@ -70,6 +69,8 @@ def main(media_dir, checkpoints_dir):
 
 
 if __name__ == "__main__":
+    # specify the media and checkpoints directories
+    # default values are set to "../media" and "../checkpoints"
     parser = argparse.ArgumentParser(description="Censor hate speech from videos.")
     parser.add_argument(
         "--media_dir",
@@ -87,4 +88,3 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(args.media_dir, args.checkpoints_dir)
-    # main("../media", "../checkpoints")

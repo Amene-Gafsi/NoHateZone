@@ -110,7 +110,7 @@ def main():
     print("creating model")
 
     model = HateClassifier(embed_dim=768).to(device)
-    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_mmh_8.pt")
+    pretrained_checkpoint = os.path.join(checkpoint_dir, "model_mmh.pt")
     checkpoint = torch.load(pretrained_checkpoint, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
 
@@ -139,9 +139,9 @@ def main():
         scheduler=scheduler,
     )
 
-    # final_model_path = os.path.join(checkpoint_dir, "final_model.pt")
-    # torch.save(model.state_dict(), final_model_path)
-    # print(f"Final model saved to {final_model_path}")
+    final_model_path = os.path.join(checkpoint_dir, "model_hatemm.pt")
+    torch.save(model.state_dict(), final_model_path)
+    print(f"Final model saved to {final_model_path}")
 
     eval_model(model, test_dataloader, device, checkpoint_dir)
 

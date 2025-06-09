@@ -237,9 +237,9 @@ def main():
         epochs=20,
     )
 
-    # final_model_path = os.path.join(checkpoint_dir, "final_model.pt")
-    # torch.save(model.state_dict(), final_model_path)
-    # print(f"Final model saved to {final_model_path}")
+    final_model_path = os.path.join(checkpoint_dir, "model_mmh.pt")
+    torch.save(model.state_dict(), final_model_path)
+    print(f"Final model saved to {final_model_path}")
 
     evaluate_model(model, test_dataloader, device, checkpoint_dir)
 

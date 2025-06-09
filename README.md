@@ -4,7 +4,8 @@
 ```text
 ├── README.md
 ├── data/
-│   ├── raw/
+│   ├── HateMM/
+│   │   Includes the 
 │   └── processed/
 ├── src/
 │   ├── module1.py

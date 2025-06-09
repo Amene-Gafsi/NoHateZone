@@ -65,7 +65,7 @@
 │   │   │
 │   │   └── other .py files for evaluation purposes
 │   │
-│   ├── utils/
+│   └── utils/
 │       └── includes the helper functions
 │
 │

@@ -10,7 +10,8 @@
 │   └── MMHS150K/
 │       └── Includes memes data and corresponding embeddings       
 │
-├── \texbf{main_process}/
+│
+├── main_process/
 │   ├── frame_audio_decomposer.py: decomposes the video into audio chunks and frames extracted │   │   per second
 │   │    
 │   ├── audio2text.py & utils.py: includes helper functions and model imports
@@ -22,9 +23,21 @@
 │   └── .csv and .xslx files: are intermediary files to get the embeddings for model training
 │
 │
-│
 ├── src/
-│   ├── module1.py
+│   ├── embedding/
+│   │   ├── audio_image_combiner.ipnyb: selects a random image given the audio chunk intervals
+│   │   │
+│   │   └── other .py files: get the embeddings (768 x 1) for HateMM and MMHS150K using our ViT │   │       and DistillBERT
+│   ├── models   
+│   │
+│   │
+│   │
+│   │
+│   │
+
+
+
+
 │   └── module2.py
 └── tests/
     └── test_module1.py

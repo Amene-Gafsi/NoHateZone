@@ -54,16 +54,21 @@
 │   │   
 │   │     
 │   ├── evaluation/
-│   ├── HateMM/
-│   │   └── HateMM_annotation_adjusted.xlsx: is the updated HateMM data including the modality-specific labels
-│   │   └── MMHS150K/
-│   │    └── Includes memes data and corresponding embeddings
+│   │   ├── SCMA_fine-tune_results/
+│   │   │   ├── result_analyzer.py: calcualtes the standard deviation of the metrics in text_metrics.csv
+│   │   │   │  
+│   │   │   └── test_metrics.csv and roc_per_seed.png: results of SCMA fine-tuning 
+│   │   ├── SCMA_fine-tune_results/
+│   │   │   └── results of SCMA pre-training
+│   │   │
+│   │   └── other .py files for evaluation purposes
 │   │
-│   │  
 │   ├── utils/
-│   │   └──
-
- 
+│   │   └── includes the helper functions
+│
+│
+├── media/
+│   ├── 'input/video'/ 
 
 
 ```

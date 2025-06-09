@@ -2,7 +2,6 @@
 
 ## File Structure
 ```text
-.
 ├── README.md
 ├── data/
 │   ├── raw/

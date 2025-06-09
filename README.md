@@ -13,7 +13,9 @@
 │
 │
 ├── main_process/
-│       ├── frame_audio_decomposer.py
+│       ├── frame_audio_decomposer.py: main python file that decomposes the video into audio    │       │     chunks and frames exctracted per second
+│       │    
+│       ├── audio2text.py & utils.py: python files that include 
 │
 │
 │

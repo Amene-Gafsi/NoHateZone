@@ -71,19 +71,25 @@ def main(media_dir, checkpoints_dir):
 if __name__ == "__main__":
     # specify the media and checkpoints directories
     # default values are set to "../media" and "../checkpoints"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    default_media_dir = os.path.abspath(os.path.join(current_dir, "..", "media"))
+    default_checkpoints_dir = os.path.abspath(
+        os.path.join(current_dir, "..", "checkpoints")
+    )
+
     parser = argparse.ArgumentParser(description="Censor hate speech from videos.")
     parser.add_argument(
         "--media_dir",
         type=str,
         # required=True,
-        default="../media",
+        default=default_media_dir,
         help="Path to the media directory (containing input/output folders)",
     )
     parser.add_argument(
         "--checkpoints_dir",
         type=str,
         # required=True,
-        default="../checkpoints",
+        default=default_checkpoints_dir,
         help="Path to the directory containing model checkpoints",
     )
     args = parser.parse_args()

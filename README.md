@@ -10,15 +10,16 @@
 │   └── MMHS150K/
 │       └── Includes memes data and corresponding embeddings       
 │
-│
-│
-├── main_process/
-│       ├── frame_audio_decomposer.py: main python file that decomposes the video into audio    │       │     chunks and frames exctracted per second
-│       │    
-│       ├── audio2text.py & utils.py: python files that include 
-│
-│
-│
+├── \texbf{main_process}/
+│   ├── frame_audio_decomposer.py: decomposes the video into audio chunks and frames extracted │   │   per second
+│   │    
+│   ├── audio2text.py & utils.py: includes helper functions and model imports
+│   │   
+│   ├── chunk_frame_generator.py: generates the frames with 1-second frequency and extracts     │   │   the corresponding texts using OCR
+│   │
+│   ├── chunk_labeller_with_intervals.ipynb: gets the data ready to acquire the performance     │   │   metrics for our fine-tuned DistillBERT (DBertXhate)
+│   │
+│   └── .csv and .xslx files: are intermediary files to get the embeddings for model training
 │
 │
 │

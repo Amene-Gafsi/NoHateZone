@@ -72,9 +72,10 @@ To reproduce our results and test the pipeline, follow these steps:
     python3 src/train.py --model finetune_fusion  # Third: Finetuning DCMA on HateMM
     ```
     Models are saved under `/checkpoints`.
-    Place fusion_data.pkl under the `/results` folder, then follow the following commands to train:
+    Place fusion_data.pkl,embeddings_hatemm_mert.pkl,best_model_weights.pth and under the `/training` folder, then follow the following commands to train:
     ```bash
-    python3 training/fusion_archv3.py
+    python3 src/training/fusion_archv3.py   # Fourth: Pretraining SCMA on MMHS150K
+    python3 src/training/fine_tune_SCMA.py  # Fifth: Finetuning SCMA on HateMM
     ```
 
 6. **Run Inference:** Place a video at `media/input/video/video.mp4` and run:

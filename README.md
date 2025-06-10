@@ -72,8 +72,12 @@ To reproduce our results and test the pipeline, follow these steps:
     python3 src/train.py --model finetune_fusion  # Third: Finetuning DCMA on HateMM
     ```
     Models are saved under `/checkpoints`.
+    Place fusion_data.pkl under the `/results` folder, then follow the following commands to train:
+    ```bash
+    python3 training/fusion_archv3.py
+    ```
 
-5. **Run Inference:** Place a video at `media/input/video/video.mp4` and run:
+6. **Run Inference:** Place a video at `media/input/video/video.mp4` and run:
     ```bash
     python3 src/main.py
     ```

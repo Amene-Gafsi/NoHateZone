@@ -81,8 +81,6 @@ To reproduce our results and test the pipeline, follow these steps:
 
 ## File Structure
 ```text
-│
-│
 ├── README.md
 │
 ├── data/

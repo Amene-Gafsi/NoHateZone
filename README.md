@@ -1,5 +1,101 @@
 # NoHateZone
 
+NoHateZone is a multi-modal deep learning framework that detects and censors hateful segments in videos. It combines audio, image, and text analysis using advanced transformer-based models to identify and censor hate speech at the segment level, rather than simply classifying entire videos as hateful or not. The censored output video replaces hateful audio with beep sounds and applies blur over hateful visual frames.
+
+
+## Project Overview
+
+NoHateZone is a multi-modal deep learning system designed to detect and censor hate speech in videos. As online hate increasingly appears in complex formats (videos, memes, audio clips), our solution:
+
+### Pipeline Architecture
+1. **Input Decomposition**  
+   - Video → Frames + Audio streams
+
+2. **Speech Analysis**  
+   - Whisper-large-v3 for audio transcription  
+   - Fine-tuned DistilBERT for hate speech detection
+
+3. **Visual Analysis**  
+   - GOT-OCR2.0 for text extraction from frames  
+   - ViT (vision transformer) for image feature extraction
+
+4. **Multi-Modal Fusion**  
+   - SCMA (Single Cross-modal Attention) architecture  
+   - DCMA (Dual Cross-modal Attention) architecture
+
+5. **Content Moderation**  
+   - Audio censorship (beeping)  
+   - Visual blurring of hateful content
+
+### Key Features
+- Real-time processing capability
+- Frame-level hate detection precision
+- Context-aware multi-modal fusion
+- Non-destructive censorship (preserves non-hate content)
+
+## Datasets
+
+1. **[HateSpeechDataset](https://www.kaggle.com/datasets/waalbannyantudre/hate-speech-detection-curated-dataset)**  
+   Used for fine-tuning the DistilBERT classifier for audio speech hate detection.
+
+2. **[HateMM Dataset](https://zenodo.org/records/7799469) (re-annotated)**  
+   Multi-modal dataset of hateful and non-hateful videos. Re-annotated with refined time intervals and modality-specific labels. We provide our annotations file in `data/HateMM` directory.
+
+
+3. **[MMHS150K](https://www.kaggle.com/datasets/victorcallejasf/multimodal-hate-speech)**  
+   Meme-based dataset used to pre-train fusion models combining tweet texts and images/memes.
+
+## Pipeline Architecture
+
+Our multimodal hate detection system combines state-of-the-art models for comprehensive analysis:
+
+- **Speech Processing:**
+  - `whisper-large-v3-turbo` for audio transcription
+  - `distilbert-base-uncased` for text-based hate speech detection
+
+- **Visual Processing:**
+  - `GOT-OCR2_0` for text extraction from video frames
+  - `vit-base-patch16-224` for image feature extraction
+
+- **Fusion Models:**
+  - `SCMA`: Single Cross-Modal Attention
+  - `DCMA`: Dual Cross-Modal Attention
+
+The system processes both visual and auditory content simultaneously, with our fusion models combining these modalities for robust hate content detection.
+
+## How to Run the Pipeline
+
+To reproduce our results and test the pipeline, follow these steps:
+
+1. **Build Environment:** Use the provided `Dockerfile` and `requirements.txt` to build the container:
+    ```bash
+    docker build -t nohatezone .
+    ```
+
+2. **Prepare Datasets:** Download and extract datasets into the following structure:
+    ```
+    data/
+    ├── HateMM/
+    ├── HateSpeechDataset/
+    └── MMHS150K/
+    ```
+
+3. **Generate Embeddings:** Run the scripts in `src/embedding/` to generate and save .pkl embeddings.
+
+4. **Train Models:** Use the following commands to train:
+    ```bash
+    python3 src/train.py --model bert             # First: Finetuning DistilBERT on HateSpeechDataset
+    python3 src/train.py --model pretrain_fusion  # Second: Pretraining DCMA on MMHS150K
+    python3 src/train.py --model finetune_fusion  # Third: Finetuning DCMA on HateMM
+    ```
+    Models are saved under `/checkpoints`.
+
+5. **Run Inference:** Place a video at `media/input/video/video.mp4` and run:
+    ```bash
+    python3 main.py
+    ```
+    The censored output appears in `media/output/video/`.
+
 ## File Structure
 ```text
 │
@@ -9,6 +105,8 @@
 ├── data/
 │   ├── HateMM/
 │   │   └── HateMM_annotation_adjusted.xlsx: is the updated HateMM data including the modality-specific labels
+│   ├── HateSpeechDataset
+│   │   └── Includes the HateSpeechDataset
 │   └── MMHS150K/
 │       └── Includes memes data and corresponding embeddings       
 │
@@ -29,20 +127,19 @@
 │   ├── embedding/
 │   │   ├── audio_image_combiner.ipnyb: selects a random image given the audio chunk intervals
 │   │   │
-│   │   └── other .py files: get the embeddings (768 x 1) for HateMM and MMHS150K using our ViT and DistillBERT
+│   │   └── other .py files: get the embeddings (dim=768) for HateMM and MMHS150K using our ViT and DistillBERT
 │   │
 │   ├── models/   
-│   │   ├── crossval_model.py:
+│   │   ├── crossval_model.py: Modular script used to find the best architecture for DCMA using cross-validation
 │   │   │
-│   │   └── fusion_model.py:
+│   │   └── fusion_model.py: DCMA Final Architecture
 │   │
-│   ├── tests/
-│   │   └──
+│   ├── tests/ Some tests performed 
 │   │
 │   ├── train/
 │   │   ├── bert_finetune.py: training file for DistillBERT fine-tuning using the HateSpeechDataset for detecting hate in audio transcriptions
 │   │   │
-│   │   ├── crossval_train.py:
+│   │   ├── crossval_train.py: Script for running crossval DCMA model to identify best parameters and architecture.
 │   │   │
 │   │   ├── fine_tune_SCMA.py: SCMA fusion architecture fine-tuned on HateMM data (audio + image + OCR text)
 │   │   │
@@ -73,15 +170,26 @@
 │   ├── 'input/video'/
 │   │    └── includes the input video for inference
 │   └── 'output/video'/
-│       └── includes the censored video  
+│       └── includes the final generated censored video  
 │
 │
-├── submission/
-│   └── includes the necessary files for project submission
-│
-│
-
-
+└── submission/
+    └── includes the necessary files for project submission
 ```
 
+## Contact 
+For questions or issues, feel free to open a GitHub issue or reach out to any of the project contributors.
 
+## Citation
+
+If you use this work, please cite our work:
+
+```bibtex
+@techreport{nohatezone2025,
+  title     = {NoHateZone: A Multi-Modal Deep Learning Framework for Censoring Hateful Videos},
+  author    = {Gafsi, Amene and Ulgüner, Mert and Truttmann, Noah},
+  institution = {École Polytechnique Fédérale de Lausanne (EPFL)},
+  year      = {2025},
+  note      = {Course Project for EE-559: Deep Learning},
+  url       = {https://github.com/Amene-Gafsi/NoHateZone/blob/main/submission/Project_Report.pdf}
+}

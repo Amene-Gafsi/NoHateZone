@@ -14,7 +14,7 @@ NoHateZone is a multi-modal deep learning system designed to detect and censor h
   <em>Figure 1: End-to-end NoHateZone pipeline.</em>
 </p>
 
-Our multimodal hate detection system combines state-of-the-art models for comprehensive analysis:
+Our multimodal hate detection system combines state-of-the-art models:
 
 - **Speech Processing:**
   - `whisper-large-v3-turbo` for audio transcription
@@ -77,7 +77,7 @@ To reproduce our results and test the pipeline, follow these steps:
 
 5. **Run Inference:** Place a video at `media/input/video/video.mp4` and run:
     ```bash
-    python3 main.py
+    python3 src/main.py
     ```
     The censored output appears in `media/output/video/`.
 

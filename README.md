@@ -162,17 +162,3 @@ To reproduce our results and test the pipeline, follow these steps:
 
 ## Contact 
 For questions or issues, feel free to open a GitHub issue or reach out to any of the project contributors.
-
-## Citation
-
-If you use this work, please cite our work:
-
-```bibtex
-@techreport{nohatezone2025,
-  title     = {NoHateZone: A Multi-Modal Deep Learning Framework for Censoring Hateful Videos},
-  author    = {Gafsi, Amene and Ulgüner, Mert and Truttmann, Noah},
-  institution = {École Polytechnique Fédérale de Lausanne (EPFL)},
-  year      = {2025},
-  note      = {Course Project for EE-559: Deep Learning},
-  url       = {https://github.com/Amene-Gafsi/NoHateZone/blob/main/submission/Project_Report.pdf}
-}

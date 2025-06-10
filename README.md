@@ -5,8 +5,6 @@ NoHateZone is a multi-modal deep learning framework that detects and censors hat
 
 ## Project Overview
 
-NoHateZone is a multi-modal deep learning system designed to detect and censor hate speech in videos. As online hate increasingly appears in complex formats (videos, memes, audio clips), our solution:
-
 ### Pipeline Architecture
 <p align="center">
   <img src="assets/Main_architecture.jpg" alt="NoHateZone Framework" width="800"/>

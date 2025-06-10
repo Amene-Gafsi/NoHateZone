@@ -8,24 +8,21 @@ NoHateZone is a multi-modal deep learning framework that detects and censors hat
 NoHateZone is a multi-modal deep learning system designed to detect and censor hate speech in videos. As online hate increasingly appears in complex formats (videos, memes, audio clips), our solution:
 
 ### Pipeline Architecture
-1. **Input Decomposition**  
-   - Video → Frames + Audio streams
+Our multimodal hate detection system combines state-of-the-art models for comprehensive analysis:
 
-2. **Speech Analysis**  
-   - Whisper-large-v3 for audio transcription  
-   - Fine-tuned DistilBERT for hate speech detection
+- **Speech Processing:**
+  - `whisper-large-v3-turbo` for audio transcription
+  - `distilbert-base-uncased` for text-based hate speech detection
 
-3. **Visual Analysis**  
-   - GOT-OCR2.0 for text extraction from frames  
-   - ViT (vision transformer) for image feature extraction
+- **Visual Processing:**
+  - `GOT-OCR2_0` for text extraction from video frames
+  - `vit-base-patch16-224` for image feature extraction
 
-4. **Multi-Modal Fusion**  
-   - SCMA (Single Cross-modal Attention) architecture  
-   - DCMA (Dual Cross-modal Attention) architecture
+- **Fusion Models:**
+  - `SCMA`: Single Cross-Modal Attention
+  - `DCMA`: Dual Cross-Modal Attention
 
-5. **Content Moderation**  
-   - Audio censorship (beeping)  
-   - Visual blurring of hateful content
+The system processes both visual and auditory content simultaneously, with our fusion models combining these modalities for robust hate content detection.
 
 ### Key Features
 - Real-time processing capability
@@ -44,24 +41,6 @@ NoHateZone is a multi-modal deep learning system designed to detect and censor h
 
 3. **[MMHS150K](https://www.kaggle.com/datasets/victorcallejasf/multimodal-hate-speech)**  
    Meme-based dataset used to pre-train fusion models combining tweet texts and images/memes.
-
-## Pipeline Architecture
-
-Our multimodal hate detection system combines state-of-the-art models for comprehensive analysis:
-
-- **Speech Processing:**
-  - `whisper-large-v3-turbo` for audio transcription
-  - `distilbert-base-uncased` for text-based hate speech detection
-
-- **Visual Processing:**
-  - `GOT-OCR2_0` for text extraction from video frames
-  - `vit-base-patch16-224` for image feature extraction
-
-- **Fusion Models:**
-  - `SCMA`: Single Cross-Modal Attention
-  - `DCMA`: Dual Cross-Modal Attention
-
-The system processes both visual and auditory content simultaneously, with our fusion models combining these modalities for robust hate content detection.
 
 ## How to Run the Pipeline
 

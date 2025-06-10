@@ -177,7 +177,7 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # load data
-    df = pd.read_pickle('./fine_tune_hatemm/embeddings_hatemm_mert.pkl')
+    df = pd.read_pickle('./training/embeddings_hatemm_mert.pkl')
     parts = df['frameID'].str.rsplit('_frame', n=1, expand=True)
     df['video_group'] = parts[0]
 
@@ -241,7 +241,7 @@ def main():
 
             # model init
             model = CrossModalBlock(dim, heads=16, dropout=0.6, ff_ratio=2).to(device)
-            checkpoint = torch.load('./fine_tune_hatemm/best_model_weights.pth', map_location=device)
+            checkpoint = torch.load('./training/best_model_weights.pth', map_location=device)
             model.load_state_dict(checkpoint, strict=False)
 
             optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=0.001)

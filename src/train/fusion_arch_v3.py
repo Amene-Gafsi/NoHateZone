@@ -284,7 +284,7 @@ def run_training(df, hp_grid, cv_splits=5, seed=42):
     return model
 
 if __name__ == '__main__':
-    df = pd.read_pickle(Path.cwd() / 'results' / 'fusion_data.pkl')
+    df = pd.read_pickle(Path.cwd() / 'training' / 'fusion_data.pkl')
     print("Data is loaded...")
     hp_grid = {
         'lr': [1e-3, 1e-6],
